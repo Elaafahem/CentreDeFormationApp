@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zayeni Training - Client CSR (SPA)</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f3f4f6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #2563EB, #1d4ed8);
+            color: white;
+            padding: 40px 0;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            border: none;
+            shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="hero text-center">
+        <h1 class="fw-bold"><i class="fas fa-layer-group"></i> Client CSR (SPA)</h1>
+        <p class="lead">Interface Client JavaScript consommant l'API REST Spring Boot</p>
+        <div class="mt-3">
+            <button class="btn btn-light" onclick="loadData()"> <i class="fas fa-sync-alt"></i> Rafraîchir
+                Données</button>
+            <a href="/dashboard" class="btn btn-outline-light ms-2">Retour au Dashboard SSR</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <!-- Etudiants Section -->
+            <div class="col-md-6">
+                <div class="card p-3">
+                    <h4 class="text-primary border-bottom pb-2"><i class="fas fa-user-graduate"></i> Étudiants (API)
+                    </h4>
+                    <div id="loadingEtudiants" class="text-center py-3">
+                        <div class="spinner-border text-primary"></div>
+                    </div>
+                    <ul class="list-group list-group-flush" id="listEtudiants"></ul>
+                </div>
+            </div>
+
+            <!-- Cours Section -->
+            <div class="col-md-6">
+                <div class="card p-3">
+                    <h4 class="text-success border-bottom pb-2"><i class="fas fa-book-open"></i> Cours (API)</h4>
+                    <div id="loadingCours" class="text-center py-3">
+                        <div class="spinner-border text-success"></div>
+                    </div>
+                    <ul class="list-group list-group-flush" id="listCours"></ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inscription Form Section -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card p-4">
+                    <h4 class="text-dark border-bottom pb-2"><i class="fas fa-clipboard-check"></i> Nouvelle Inscription
+                        (via API POST)</h4>
+                    <form id="inscriptionForm">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <label class="form-label">Choisir Étudiant</label>
+                                <select class="form-select" id="selectEtudiant" required></select>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="form-label">Choisir Cours</label>
+                                <select class="form-select" id="selectCours" required></select>
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100">Inscrire</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="inscriptionResult" class="mt-3"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const API_ETUDIANTS = '/api/etudiants';
+        const API_COURS = '/api/cours';
+        const API_INSCRIPTIONS = '/api/inscriptions';
+
+        document.addEventListener('DOMContentLoaded', loadData);
+
+        function loadData() {
+            fetchEtudiants();
+            fetchCours();
+        }
+
+        async function fetchEtudiants() {
+            const list = document.getElementById('listEtudiants');
+            const select = document.getElementById('selectEtudiant');
+            const loader = document.getElementById('loadingEtudiants');
+
+            list.innerHTML = '';
+            select.innerHTML = '<option value="">-- Sélectionner --</option>';
+            loader.style.display = 'block';
+
+            try {
+                const response = await fetch(API_ETUDIANTS);
+                const data = await response.json();
+                loader.style.display = 'none';
+
+                data.forEach(e => {
+                    // Update List
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                    li.innerHTML = `<span>${e.nom} ${e.prenom}</span> <span class="badge bg-light text-dark">${e.email}</span>`;
+                    list.appendChild(li);
+
+                    // Update Select
+                    const opt = document.createElement('option');
+                    opt.value = e.id; // Assuming API returns object with id. If it returns Etudiant entity, it has id.
+                    // Note: If API returns linked objects, ensure structure.
+                    opt.textContent = `${e.nom} ${e.prenom}`;
+                    select.appendChild(opt);
+                });
+            } catch (err) {
+                console.error(err);
+                loader.innerHTML = '<p class="text-danger">Erreur chargement API</p>';
+            }
+        }
+
+        async function fetchCours() {
+            const list = document.getElementById('listCours');
+            const select = document.getElementById('selectCours');
+            const loader = document.getElementById('loadingCours');
+
+            list.innerHTML = '';
+            select.innerHTML = '<option value="">-- Sélectionner --</option>';
+            loader.style.display = 'block';
+
+            try {
+                const response = await fetch(API_COURS);
+                const data = await response.json();
+                loader.style.display = 'none';
+
+                data.forEach(c => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                    li.innerHTML = `<span>${c.titre}</span> <span class="badge bg-success-soft text-success">${c.prix} TND</span>`;
+                    list.appendChild(li);
+
+                    const opt = document.createElement('option');
+                    opt.value = c.id;
+                    opt.textContent = c.titre;
+                    select.appendChild(opt);
+                });
+            } catch (err) {
+                console.error(err);
+                loader.innerHTML = '<p class="text-danger">Erreur chargement API</p>';
+            }
+        }
+
+        document.getElementById('inscriptionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const etudiantId = document.getElementById('selectEtudiant').value;
+            const coursId = document.getElementById('selectCours').value;
+            const resultDiv = document.getElementById('inscriptionResult');
+
+            if (!etudiantId || !coursId) return;
+
+            // Construct payload. 
+            // Inscription entity expects Etudiant and Cours objects usually. 
+            // But if REST Controller uses @RequestBody Inscription, we need to pass objects with IDs.
+            const payload = {
+                etudiant: { id: etudiantId },
+                cours: { id: coursId },
+                dateInscription: new Date().toISOString().split('T')[0] // today
+            };
+
+            try {
+                const response = await fetch(API_INSCRIPTIONS, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    resultDiv.innerHTML = '<div class="alert alert-success">Inscription réussie via API!</div>';
+                } else {
+                    resultDiv.innerHTML = '<div class="alert alert-danger">Erreur API: ' + response.status + '</div>';
+                }
+            } catch (err) {
+                resultDiv.innerHTML = '<div class="alert alert-danger">Erreur Réseau</div>';
+            }
+        });
+    </script>
+</body>
+
+</html>

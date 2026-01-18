@@ -1,0 +1,240 @@
+Source File: C:\Users\MSI\Desktop\PROJET ZAYENI\Reference\tps\tp4\Atelier_Framework_spring_04--Thymeleaf_Partie_06 (2).pdf
+----------------------------------------
+[Page 1]
+Atelier_Framewok_Spring_04_Thymeleaf -Partie -06                         -  Mohamed ZAYANI – A.U. 2025/2026  Page 1 
+   
+Université Nord Américaine privée  
+   Institut International Technologie  
+ 
+ 
+  
+Atelier Framework Spring -04 
+Thymeleaf – Partie 0 6 
+ 
+ Objectifs  
+ 
+• Gestion de s layouts  
+• Affichage d’un menu  
+• Affichage d’un pied de page  
+ 
+ 
+ 
+ 
+A.  Définition d’un layout  
+1. Prendre une copie du projet  «jpa-spring -boot -Thymeleaf5 » et le nommer « jpa-spring -
+boot -Thymeleaf6 ». 
+2. Ajouter la dépendance MAVEN du layout à Thymeleaf  dans le fichier POM du projet  : 
+ 
+  <dependency > 
+   <groupId>nz.net.ultraq.thymeleaf </groupId> 
+   <artifactId >thymeleaf -layout-dialect</artifactId > 
+  </dependency > 
+ 
+3. Ajouter  le fichier « layout .html » dans le dossier «  templates  » ayant le code suivant  : 
+ 
+<!DOCTYPE html> 
+<html 
+ xmlns:th ="http://www.thymeleaf.org"   
+ xmlns:layout ="http://www.ultraq.net.nz/thymeleaf/layout" > 
+<head> 
+<meta charset="utf-8"> 
+<title>Gestion de stock</title> 
+<link rel= "stylesheet"  
+      type ="text/css"    
+      href= "../static/css/bootstrap.min.css"  
+      th:href="@{css/bootstrap.min.css}"  
+      /> 
+<link rel= "stylesheet"  
+      type ="text/css"    
+      href= "../static/css/style.css"  
+      th:href="@{css/style.css}"  
+      /> 
+ 
+</head> 
+<body> 
+ 
+ <header> 
+
+--------------------
+[Page 2]
+Atelier_Framewok_Spring_04_Thymeleaf -Partie -06                         -  Mohamed ZAYANI – A.U. 2025/2026  Page 2 
+   <div class ="navbar navbar -default" > 
+   <div class ="container -fluid"> 
+    <ul class="nav navbar -nav">  
+     <li> <a th:href="@{index}" >Consultation de produits </a> </li> 
+     <li> <a th:href="@{form}" >Fiche Produit</a> </li> 
+       
+    </ul> 
+   </div> 
+   
+  </div> 
+ </header> 
+  
+ <section layout:fragment ="content" > 
+  
+ </section> 
+ <footer class="navbar-fixed-bottom"> 
+  <hr/> 
+      <div class ="container" > 
+          <small> 
+           ----Gestion de Stock---- 
+          </small>       
+      </div> 
+ </footer> 
+  
+</body> 
+</html> 
+ 
+B. Utilisation du layout par les différentes vues du projet  
+ 
+4. Prendre la nouvelle version de la vue « produits.html  » : 
+ 
+<!DOCTYPE html> 
+<html xmlns:th ="http://www.thymeleaf.org"     
+xmlns:layout ="http://www.ultraq.net.nz/thymeleaf/layout"   
+   layout:decorate ="~{layout}"    > 
+<head> 
+<meta charset="utf-8"/> 
+<title>Liste des Produits </title> 
+<link rel= "stylesheet"  
+      type ="text/css"    
+      href= "../static/css /bootstrap.min.css"  
+      th:href="@{/css/bootstrap.min.css}"  
+      /> 
+</head> 
+<body> 
+<div layout:fragment ="content" > 
+ 
+<div class="container" > 
+<form th:action ="@{index}"  method="get" > 
+   <label>Mot Clé:</label> 
+   <input type="text" name ="motCle"  th:value ="${motCle}" /> 
+   <button class ="btn btn -primary" > Chercher  </button> 
+</form> 
+</div> 
+--------------------
+[Page 3]
+Atelier_Framewok_Spring_04_Thymeleaf -Partie -06                         -  Mohamed ZAYANI – A.U. 2025/2026  Page 3 
+  
+<div class ="container spacer" > 
+<table class ="table table -striped" > 
+  <thead> 
+   <tr> 
+   <th>ID</th><th>Désignation </th><th>Prix</th><th>Quantité </th><th>Date 
+Achat</th><th>Action</th> 
+  </thead> 
+  <tbody> 
+   <tr th:each="p:${pageProduits.content}" > 
+      
+     <td th:text="${p.id}"  ></td> 
+     <td th:text="${p.designation}"  ></td> 
+     <td th:text="${p.prix}"  ></td> 
+     <td th:text="${p.quantite}"  ></td> 
+     <td th:text="${p.dateAchat}"  ></td> 
+     <td> <a  th:href="@{edit(id=${p.id})}"   >Editer</a></td> 
+     <td> <a onclick ="return confirm('Confirmez vous la suppression de ce produit?')"   
+th:href="@{delete(id=${p.id},page=${pageCourante},motCle=${motCle})}"   >Supprimer </a></td> 
+   </tr> 
+  </tbody> 
+</table> 
+</div> 
+<div class ="container" > 
+ <ul class ="nav nav -pills"    > 
+    <li  th:each ="p:${pages}"  th:class ="${p==pageCourante }?active:''" > 
+     <a th:text ="${p}"  th:href ="@{index(page =${p} , motCle =${motCle})}" ></a> 
+    </li> 
+ </ul> 
+</div> 
+</div> 
+</body> 
+</html> 
+ 
+Remarquer l’ajout du code en gras qui permet d’i ntégrer la page « produits.html » au 
+layout . Le moteur Thymeleaf intègre ce qui est défini à l’intérieur de la balise <div 
+layout:fragment="content">  à son emplacement dans le layout.  
+ 
+ 
+5. Prendre la nouvelle version de la vue « formProduit .html  » : 
+ 
+<!DOCTYPE html> 
+<html xmlns:th ="http://www.thymeleaf.org"  
+xmlns:layout ="http://www.ultraq.net.nz/thymeleaf/layout"   
+   layout:decorate ="~{layout}" > 
+<head> 
+<meta charset="utf-8"/> 
+<title>Fiche Produit</title> 
+<link rel= "stylesheet"  
+      type ="text/css"    
+      href= "../static/css/bootstrap.min.css"  
+      th:href="@{/css/bootstrap.min.css}"  
+      /> 
+       
+--------------------
+[Page 4]
+Atelier_Framewok_Spring_04_Thymeleaf -Partie -06                         -  Mohamed ZAYANI – A.U. 2025/2026  Page 4 
+   <link rel= "stylesheet"  
+  type ="text/css"    
+  href= "../static/css/mon_style.css"  
+  th:href="@{/css/mon_style.css}"  
+  /> 
+</head> 
+<body> 
+<div layout:fragment ="content" > 
+<div class="col-md-6 col-sm-6 col-xs-12 spacer col -md-offset-3" > 
+ <div class="panel panel -default" > 
+  <div class ="panel-heading" >Saisie d'un produit  </div> 
+  <div class= "panel-body"> 
+   <form th:action ="@{save}"  method="post" th:object  ="${produit}" > 
+   <div class="form-group"> 
+      <label class="control -label">Désignation </label> 
+      <input class="form-control"  type="text"  
+             th:field ="*{designation}" /> 
+      <span class ="red" th:errors  ="*{designation}" ></span> 
+   </div> 
+   <div class="form-group"> 
+      <label class="control -label">Prix</label> 
+      <input class="form-control"  type="text"   
+              th:field ="*{prix}" /> 
+      <span class ="red" th:errors  ="*{prix}" ></span> 
+   </div> 
+   <div class="form-group"> 
+      <label class="control -label">Quantité </label> 
+      <input class="form-control"  type="text"  
+              th:field ="*{quantite}" /> 
+       <span class ="red" th:errors  ="*{quantite}" ></span> 
+     
+   </div> 
+    
+   <div class="form-group"> 
+      <label class="control -label">Date Achat</label> 
+      <input class="form-control"  type="date"  
+             th:field ="*{dateAchat}" /> 
+     <span class ="red" th:errors  ="*{dateAchat}" ></span> 
+   </div> 
+    
+   <div >       
+      <button class="btn btn -primary"  type="submit"   >Enregistrer </button> 
+             
+   </div>    
+   </form> 
+  </div> 
+  <div class="panel-footer"> ----Gestion de stock---  </div>   
+ </div> 
+</div> 
+</div> 
+</body> 
+</html> 
+ 
+6. Enregistrer la modif ication et relancer l’exécution  : 
+ 
+--------------------
+[Page 5]
+Atelier_Framewok_Spring_04_Thymeleaf -Partie -06                         -  Mohamed ZAYANI – A.U. 2025/2026  Page 5 
+  
+ 
+ 
+Exercice  
+ 
+7. Réaliser les modifications pour les autres vues. Et tester l’exécution.   
+
+--------------------

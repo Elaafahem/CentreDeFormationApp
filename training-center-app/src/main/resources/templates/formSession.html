@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head(title='Formulaire Session')}"></head>
+
+<body>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav th:replace="~{fragments/layout :: sidebar}"></nav>
+
+        <!-- Page Content -->
+        <div id="content">
+            <!-- Top Navbar -->
+            <div th:replace="~{fragments/layout :: top-navbar}"></div>
+
+            <div class="main-container">
+
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card shadow-md border-0">
+                            <div class="card-header bg-white pt-4 pb-0 border-0">
+                                <h4 class="mb-0"><i class="fas fa-clock me-2 text-primary"></i>Saisie Session</h4>
+                            </div>
+                            <div class="card-body p-4">
+                                <form th:action="@{/session/save}" method="post" th:object="${session}">
+                                    <input type="hidden" th:field="*{id}" />
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Nom de la Session</label>
+                                        <input type="text" class="form-control" th:field="*{nom}" required
+                                            placeholder="Ex: Année 2025-2026, Semestre 1..." />
+                                    </div>
+
+                                    <div class="row mb-4">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Date de début</label>
+                                            <input type="date" class="form-control" th:field="*{dateDebut}" required />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Date de fin</label>
+                                            <input type="date" class="form-control" th:field="*{dateFin}" required />
+                                        </div>
+                                    </div>
+
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <a th:href="@{/session/index}" class="btn btn-light me-md-2">Annuler</a>
+                                        <button type="submit" class="btn btn-primary px-4">Enregistrer</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+
+</html>

@@ -1,0 +1,122 @@
+--- Extracting text from Reference/tps/tp3/Atelier_Framework_spring_01--JPA--Partie-01 (3).pdf ---
+[Page 1]
+Atelier_Framewok_Spring_0 3_JPA-Partie -01       -  Mohamed ZAYANI  – A.U. 2025/2026  Page 1 
+   
+Université Nord Américaine privée  
+   Institut International Technologie  
+ 
+ 
+  
+Atelier Framework Spring -03 
+JPA – Partie 01  
+ 
+Objectifs  
+ 
+• Préparer l’environnement Spring Boot  
+• Ajouter le module « Spring Tools  » à « eclipse  » 
+• Créer un projet Maven  
+• Configurer les dépendances avec l’assistant Spring Boot  
+ 
+ 
+ 
+• JPA est une spécification JEE créée par Sun pour standardiser le mapping 
+Objet/Relationnel.  
+• JPA définit un ensemble d’interfaces, de classes abstraites et des annotations qui 
+permettent la description de l’ORM  (Object Relational Mapping) .  
+• Il existe plusieurs implémentations  de JPA ( Hibernate , TopLink , EclipseLink …) 
+• L’objectif de cet atelier est l’illustration du concept ORM en utilisant la spécification JPA 
+de JEE.  Nous adoptons le modèle conceptuel suivant  : 
+ 
+ 
+ 
+ 
+
+--------------------
+[Page 2]
+Atelier_Framewok_Spring_0 3_JPA-Partie -01       -  Mohamed ZAYANI  – A.U. 2025/2026  Page 2 
+ • Pour réaliser le concept ORM du JPA, nous utilisons le framework Spring avec deux 
+approches  : 
+1. L’utilisation du framework Hibernate  (avec EntityManager)  :DAO  
+2. L’utilisation du module «  Spring -DATA  » du Spring  : Repository  
+ 
+ 
+A.  Ajout  du module Spring Tools  
+1. Ouvrir l’EDI «  eclipse  » 
+2. Aller au menu «  Help  » et choisir la commande «  Eclipse Marketplace..  » 
+ 
+ 
+3. Dans la zone de recherche, taper «  Spring Tools  » et installer le module «  Spring Tools 
+4 (aka Spring Tool Suite 4) 4. 31.0.RELEASE)  » (version actuelle )  
+ 
+
+--------------------
+[Page 3]
+Atelier_Framewok_Spring_0 3_JPA-Partie -01       -  Mohamed ZAYANI  – A.U. 2025/2026  Page 3 
+  
+4. Confirmer les fonctionnalités sélectionnées  : 
+ 
+
+--------------------
+[Page 4]
+Atelier_Framewok_Spring_0 3_JPA-Partie -01       -  Mohamed ZAYANI  – A.U. 2025/2026  Page 4 
+ 5. Accepter les termes de licences  : 
+ 
+6. Donner confiance au contenu à télécharger  : 
+ 
+
+--------------------
+[Page 5]
+Atelier_Framewok_Spring_0 3_JPA-Partie -01       -  Mohamed ZAYANI  – A.U. 2025/2026  Page 5 
+ 7. Donner confiances aux artéfacts  : 
+ 
+8. Redémarrer «  eclipse  » pour permettre sa mise à jour 
+ 
+B. Création d’un projet Spring Boot  
+9. Créer un nouveau projet «  Spring Boot  » (nouvelle version de Spring qui simplifie la 
+gestion des dépendances en mode Maven). Pour se faire, choisir la commande 
+« New/Other/Spring/Spring Starter Project  » : 
+ 
+
+--------------------
+[Page 6]
+Atelier_Framewok_Spring_0 3_JPA-Partie -01       -  Mohamed ZAYANI  – A.U. 2025/2026  Page 6 
+ 10. Affecter les paramètres suivants  : 
+✓ Nom du projet  :  jpa-spring -boot  
+✓ Groupe  :    dev.spring  
+✓ Artifact  :    jpa-spring -boot  
+✓ Version  :    0.0.1 -SNAPSHOT  
+✓ Package  :   spring .jpa 
+ 
+11. Appuyer sur «  Next  » pour déterminer les dépendances nécessaires (Mysql  Driver et Spring DATA 
+JPA). Spring Boot  vous facilite le choix des dépendances à travers l’assistant suivant :  
+ 
+
+--------------------
+[Page 7]
+Atelier_Framewok_Spring_0 3_JPA-Partie -01       -  Mohamed ZAYANI  – A.U. 2025/2026  Page 7 
+ 12. Cliquer sur «  Finish  » pour lancer la création du projet. Ainsi, Spring Boot télécharge les 
+dépendances indiquées et génère un fichier «  pom.xml  » configuré selon les choix 
+sélectionnés.  
+13. Remarquer, dans le volet «  Project Explorer  », la présence des dépendances suivantes  : 
+(Exemple  : lorsque vous indiquez le besoin du module JPA, Spring Boot va télécharger 
+toutes les JAR nécessaires à cette spécification.  
+ 
+ 
+14. Ouvrir le fichier «  pom.xml  » et sélectionner la dépendance de «  mysql  » 
+       <dependency > 
+   <groupId>com.mysql </groupId> 
+   <artifactId >mysql-connector -j</artifactId > 
+   <scope>runtime</scope> 
+  </dependency > 
+15. La remplacer  par la déclaration suivante  : (afin de choisir la version 5 , sinon 
+garder la version du driver donnée par défaut ) 
+       <dependency > 
+   <groupId>mysql</groupId> 
+   <artifactId >mysql-connector -java</artifactId > 
+   <version>5.1.6</version> 
+  </dependency > 
+16. Enregistrer la modification et remarquer le changement dans la liste des dépendances 
+de Maven  : 
+ 
+
+--------------------

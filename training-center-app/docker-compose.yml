@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # MySQL Database Service
+  mysqldb:
+    image: mysql:8.0
+    container_name: training-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: training_db
+      MYSQL_USER: training_user
+      MYSQL_PASSWORD: training_password
+    ports:
+      - "3307:3307"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - training-network
+
+  # Spring Boot Application Service
+  app:
+    build: .
+    container_name: training-app
+    restart: always
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/training_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: training_user
+      SPRING_DATASOURCE_PASSWORD: training_password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_PROFILES_ACTIVE: prod
+    depends_on:
+      - mysqldb
+    networks:
+      - training-network
+
+networks:
+  training-network:
+    driver: bridge
+
+volumes:
+  mysql_data:

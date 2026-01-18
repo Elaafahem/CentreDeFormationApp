@@ -1,0 +1,172 @@
+Source File: C:\Users\MSI\Desktop\PROJET ZAYENI\Reference\tps\tp1\Atelier_Framework_spring_01--Maven--Partie-05 (1).pdf
+----------------------------------------
+[Page 1]
+Atelier_Framewok_Spring_ 01_Maven -Partie -05       -  Mohamed ZAYANI  – A.U. 202 5/202 6 Page 1 
+   
+Université Nord Américaine privée  
+   Institut International Technologie  
+ 
+ 
+  
+Atelier Framework Spring -01 
+Maven -Partie -05 
+Objectifs  
+Configuration de plugins avec Maven  
+ 
+1. Utiliser un plugin pour un serveur Tomcat  embarqué  
+-déclarer le plugin dans le fichier «  pom.xml  »  
+-Lancer l’application via le plugin tomcat7  
+-Déployer le war à partir du plugin Maven vers le serveur Tomcat 
+externe  
+ 
+2. Utiliser un plugin pour le serveur Jetty  
+ 
+ 
+A. Configuer le plugin tomcat7 avec Maven (Eclipse)  
+1. Afin de déployer le projet dans l’EDI «  eclipse » et visualiser 
+l’exécution en utilisant un serveur Tomcat embarqué (interne), é diter 
+le fichier «  pom.xml » du projet «  webProjet  » pour ajouter le plugin 
+du « tomcat7 » dans la configuration Maven du projet   à l’intérieur 
+de la balise «  build » : 
+ 
+
+--------------------
+[Page 2]
+Atelier_Framewok_Spring_ 01_Maven -Partie -05       -  Mohamed ZAYANI  – A.U. 202 5/202 6 Page 2 
+ 2. Ajouter les lignes en gras suivantes  directement comme suit  : 
+<build> 
+ 
+ 
+ 
+<plugins> 
+ <plugin> 
+  <groupId>org.apache.tomcat.maven </groupId> 
+  <artifactId >tomcat7-maven-plugin</artifactId > 
+  <version>2.2</version> 
+          <!--Config:contextPath and Port (Default: 8080) --> 
+  <configuration > 
+   <path>/</path> 
+   <port>8899</port> 
+  </configuration > 
+</plugin>  
+</plugins>  
+ 
+.... 
+</build>  
+3. Sélectionner le fichier «  index.jsp  » et choisir ,en cliquant par le 
+bouton droit de la souris, la commande «  Run As / Run 
+Configurations…  » : 
+ 
+
+--------------------
+[Page 3]
+Atelier_Framewok_Spring_ 01_Maven -Partie -05       -  Mohamed ZAYANI  – A.U. 202 5/202 6 Page 3 
+ 4. Sélectionner «  Maven Build  » Créer une nouvelle configuration 
+d’exécution Maven  (avec le bouton droit de la souris) : 
+ 
+5. Cliquer sur le bouton « Workspace  » pour sélectionner le projet 
+« webProjet  » comme  dossier de base (Base directory)  :     
+ 
+
+--------------------
+[Page 4]
+Atelier_Framewok_Spring_ 01_Maven -Partie -05       -  Mohamed ZAYANI  – A.U. 202 5/202 6 Page 4 
+ 6. Spécifier un nom pour cette nouvelle configuration ( tomcat7 ) et 
+spécifier la valeur «  tomcat7:run   -X » pour «  Goals » : 
+ 
+7. Lancer l’ exécution en appuyant sur «  Run ». 
+8. Après avoir téléchargé les modules nécessaires au plugin, la console 
+affiche le succès de démarrage du plugin «  tomcat7 » : 
+a. Sur le port  : 8899 (selon la configuration du «  pom.xml ») 
+b. avec le path  : / 
+c. et l’url  : http://localhost:8899/  
+ 
+9. Accéder, via le navigateur web, à la page «  index.jsp  » en spécifiant 
+l’url suivante  : 
+
+--------------------
+[Page 5]
+Atelier_Framewok_Spring_ 01_Maven -Partie -05       -  Mohamed ZAYANI  – A.U. 202 5/202 6 Page 5 
+ http://localhost:8899/index.jsp  
+ 
+10. Réaliser la modification nécessaire  de la configuration du plugin 
+« tomcat7 » dans le fichier «  pom.xml » afin de démarr er 
+l’application WEB sur : 
+http://localhost:8899/webProjet  
+ 
+11. Pour démarrer le plugin de tomcat7 à travers le terminal  : 
+a. Arrêter le serveur  tomcat7:  
+ 
+b. Puis se positionner dans le terminal d’eclipse dans le dossier  
+« webProjet  » : 
+ 
+
+--------------------
+[Page 6]
+Atelier_Framewok_Spring_ 01_Maven -Partie -05       -  Mohamed ZAYANI  – A.U. 202 5/202 6 Page 6 
+ c. Taper la commande suivante  : 
+mvn  tomcat7:run  
+ 
+d. Tester l’exécution de l’application WEB  
+ 
+12. Maintenant, déployer l’application WEB directement sur le serveur 
+Tomcat standalone à travers le plugin tomcat7  de Maven . Pour se 
+faire : 
+a. Démarrer le serveur  externe (Tomcat9) à partir de la commande 
+«startup » dans le dossier  ( s’il n’est pas encore démarré):  
+D:\Dev\Spring\Serveurs \apache-tomcat-9.0.108\bin 
+b. Aller à la page d’administration des applications WEB pour 
+retirer l’application WEB «  webProjet  » de la liste des 
+applications déployées  : 
+
+--------------------
+[Page 7]
+Atelier_Framewok_Spring_ 01_Maven -Partie -05       -  Mohamed ZAYANI  – A.U. 202 5/202 6 Page 7 
+  
+c. Arrêter le serveur du plugin tomcat7 (dans le volet Termina) : 
+Taper Ctrl+c  
+d. Se positionner, au niveau Terminal dans le 
+dossier webProjet  puis  taper la commande  : 
+mvn tomcat7:deploy -Dtomcat.password=admin -Dtomcat.username=admin  
+ 
+e.  Remarquer le déploiement de l’application «  webProjet  » dans 
+le serveur externe Tomcat  : 
+ 
+
+--------------------
+[Page 8]
+Atelier_Framewok_Spring_ 01_Maven -Partie -05       -  Mohamed ZAYANI  – A.U. 202 5/202 6 Page 8 
+ Il est à noter que le war est déployé directement du dossier «  target » 
+du projet et nom à partir du dépôt local de Maven.  
+ 
+NB : La commande mvn tomcat7 :deploy  ne fonctionne que si le serveur 
+externe (Tomcat9) est écoute sur le port par défaut  : 8080. Sinon, il 
+est nécessaire de modifi er la configuratio n du plugin t omcat7 pour 
+qu’il puisse accéder au serve ur externe avec le port personnalisé.  
+f. L’opération inverse est aussi possible  : retirer l’application 
+web déployée. Tester ceci via la commande  : 
+mvn tomcat7: undeploy -Dtomcat.password=admin -Dtomcat.username=admin  
+B. Configuer le plugin Jetty avec Maven ( Eclipse) 
+13. Sur le même projet, refaire la même procédure pour ajouter un autre 
+plugin similaire pour un autre serveur web  « Jetty ». Voici le code 
+configuration du plugin  : (Ajouter ce code dans le même niveau que 
+celui du plugin du tomcat 7, à l’intérieur de la balsie «  plugins » ) 
+   <!-- Jetty Plugin. Default port is 8080 --> 
+    <plugin> 
+      <groupId>org.eclipse.jetty</ groupId> 
+      <artifactId >jetty-maven-plugin</ artifactId > 
+      <version>11.0.16</version> 
+      <configuration > 
+        <httpConnector > 
+          <!--host>localhost</host --> 
+          <port>9999</port> 
+        </httpConnector > 
+      </configuration > 
+    </plugin> 
+ 
+14. Lancer l’exécution du projet avec le plugin «  Jetty » sur l’url  :  
+http://localhost:9999/ index.jsp  
+Exercice  
+Réaliser un déploiement du projet « webProjet  » vers un serveur externe 
+GlassFish . 
+--------------------

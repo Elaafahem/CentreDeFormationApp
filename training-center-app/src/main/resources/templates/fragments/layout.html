@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- HEAD FRAGMENT -->
+
+<head th:fragment="head(title)">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Training Center</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Fonts (Inter & Poppins) -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- SIDEBAR FRAGMENT -->
+    <nav th:fragment="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="fas fa-graduation-cap sidebar-brand-icon"></i> ZAYENI</h3>
+        </div>
+
+        <ul class="list-unstyled components">
+            <li>
+                <a th:href="@{/dashboard}">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/etudiant/index}">
+                    <i class="fas fa-user-graduate"></i> Étudiants
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/formateur/index}">
+                    <i class="fas fa-chalkboard-teacher"></i> Formateurs
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/cours/index}">
+                    <i class="fas fa-book-open"></i> Cours
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/seance/index}">
+                    <i class="fas fa-calendar-alt"></i> Planning
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/groupe/index}">
+                    <i class="fas fa-users"></i> Groupes
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/inscription/index}">
+                    <i class="fas fa-clipboard-list"></i> Inscriptions
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/session/index}">
+                    <i class="fas fa-clock"></i> Sessions
+                </a>
+            </li>
+
+            <!-- Separator -->
+            <li style="border-top: 1px solid rgba(255,255,255,0.1); margin: 20px 0;"></li>
+
+            <li>
+                <a th:href="@{/profile}">
+                    <i class="fas fa-user-circle"></i> Profil
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- TOP NAVBAR FRAGMENT -->
+    <div th:fragment="top-navbar" class="top-navbar">
+        <div class="d-flex align-items-center">
+            <h4 class="m-0 text-muted" th:text="${#dates.format(#dates.createNow(), 'EEEE, d MMMM yyyy')}">Date</h4>
+        </div>
+        <div class="d-flex align-items-center user-profile">
+            <span class="me-2 text-muted small">Connecté en tant que</span>
+            <strong><span th:text="${#authentication != null ? #authentication.name : 'Invite'}">Admin</span></strong>
+            <img src="https://ui-avatars.com/api/?name=Admin&background=2563EB&color=fff" alt="User">
+            <a th:href="@{/logout}" class="btn btn-sm btn-outline-danger ms-3" title="Déconnexion">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- SCRIPTS FRAGMENT -->
+    <div th:fragment="scripts">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Add Chart.js if needed -->
+    </div>
+
+</body>
+
+</html>

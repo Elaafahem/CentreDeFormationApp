@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head(title='Gestion des Notes')}"></head>
+
+<body>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav th:replace="~{fragments/layout :: sidebar}"></nav>
+
+        <!-- Page Content -->
+        <div id="content">
+            <!-- Top Navbar -->
+            <div th:replace="~{fragments/layout :: top-navbar}"></div>
+
+            <div class="main-container">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold text-dark mb-1">Relevé de Notes</h2>
+                        <p class="text-muted mb-0">
+                            Étudiant : <strong class="text-primary"
+                                th:text="${inscription.etudiant.nom} + ' ' + ${inscription.etudiant.prenom}">Nom</strong>
+                            |
+                            Cours : <strong th:text="${inscription.cours.titre}">Cours</strong>
+                        </p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a th:href="@{/note/report(inscriptionId=${inscription.id})}" target="_blank"
+                            class="btn btn-outline-danger">
+                            <i class="fas fa-file-pdf me-2"></i>Télécharger PDF
+                        </a>
+                        <a th:href="@{/note/form(inscriptionId=${inscription.id})}" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>Ajouter Note
+                        </a>
+                        <a th:href="@{/inscription/index}" class="btn btn-light border">Retour</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th class="ps-4">Note / 20</th>
+                                        <th>Appréciation</th>
+                                        <th class="text-end pe-4">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="n : ${notes}">
+                                        <td class="ps-4">
+                                            <span class="badge"
+                                                th:classappend="${n.valeur >= 10 ? 'bg-success-soft' : 'bg-danger-soft'}"
+                                                style="font-size: 1rem; padding: 0.5em 1em;">
+                                                <span th:text="${n.valeur}">15</span>
+                                                <span class="opacity-50 text-xs">/20</span>
+                                            </span>
+                                        </td>
+                                        <td class="text-muted fst-italic">
+                                            <span th:if="${n.appreciation}" th:text="${n.appreciation}">Bon
+                                                travail</span>
+                                            <span th:unless="${n.appreciation}" class="text-muted opacity-50">Aucune
+                                                appréciation</span>
+                                        </td>
+                                        <td class="text-end pe-4">
+                                            <a th:href="@{/note/delete(id=${n.id}, inscriptionId=${inscription.id})}"
+                                                class="action-btn delete"
+                                                onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette note ?')"
+                                                title="Supprimer">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <!-- Empty State -->
+                                    <tr th:if="${#lists.isEmpty(notes)}">
+                                        <td colspan="3" class="text-center py-5 text-muted">
+                                            <i class="fas fa-poll fa-3x mb-3 opacity-50"></i>
+                                            <p>Aucune note enregistrée pour cet étudiant dans ce cours.</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+
+</html>

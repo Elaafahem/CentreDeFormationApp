@@ -1,0 +1,90 @@
+Source File: C:\Users\MSI\Desktop\PROJET ZAYENI\Reference\tps\tp3\Atelier_Framework_spring_01--JPA--Partie-12.pdf
+----------------------------------------
+[Page 1]
+Atelier_ Spring _03_JPA -Partie1 2                        -  Mohamed ZAYANI – A.U. 202 4/202 5 Page 1 
+  
+  
+Université Privée du Sud (ULS)  
+Institut Polytechnique  Privé  
+ des Sciences Avancées -Sfax  
+ 
+ 
+  
+Atelier Spring  -03- 
+JPA –Partie1 2 
+ 
+ Objectifs  
+ 
+• JPA et Spring Data  
+• Mettre  en œuv re d’une relation d’héritage JPA  
+• Stratégie  : @Inheritance  : Table -Per-Class  
+• Réaliser les requêtes polymorphes  
+•  
+ 
+ 
+ 
+Voici un modèle conceptuel qui modélise une relation d’héritage  : 
+• Une sous -classe «  Responsable  » caractérisé e par un salaire  
+• Une sous -classe «  Employe  » caractérisé e par deux attributs ( numero  et 
+nombreHeures ) 
+• Une classe mère «  Personne  » qui présente les attributs communs ( id, nom  et prenom ) 
+ 
+ 
+ 
+ 
+
+--------------------
+[Page 2]
+Atelier_ Spring _03_JPA -Partie1 2                        -  Mohamed ZAYANI – A.U. 202 4/202 5 Page 2 
+  
+• La stratégie «  @Inheritance  : Table -Per-Class»  
+1. Prendre une copie du projet  «jpa-spring -data -spring -boot -2-relations -3-heritage3 »  
+et le nommer « jpa-spring -data -spring-boot -2-relations -3-heritage4 » 
+ 
+2. Modifier la classe «  Personne  » (classe mère comme entité) en déclarant les en 
+changea nt la stratégie d’héritage au « TABLE _PER_CLASS ». Cette stratégie consiste à 
+transformer chaque entité en une table à part indépendante. La table contient les 
+attributs de l’entité correspondante ainsi que les attributs hérités.  
+ 
+…… 
+//pour déclarer une classe mère (entité)  
+@Entity  
+@Inheritance (strategy = InheritanceType.  TABLE_PER_CLASS ) 
+@DiscriminatorColumn (name = "TYPE_PERSONNE" ) 
+@DiscriminatorValue ("Personne" ) 
+public class Personne { 
+         // code de la classe  
+ 
+3. Lancer l’exécution du projet en utilisant une autre base de données «  spring -jpa-4» 
+(créer cette base de données et la référencer dans le fichier 
+« application.properties  ») et remarquer  : 
+✓  La génération de trois tables de la hiérarchie  : «  Personne  », « Responsable  » 
+ et « Employe  » :   
+ 
+ 
+ 
+
+--------------------
+[Page 3]
+Atelier_ Spring _03_JPA -Partie1 2                        -  Mohamed ZAYANI – A.U. 202 4/202 5 Page 3 
+ ✓ Chacune  des deux tables «  Responsable  » et «  Employe  » comporte maintenant 
+deux colonnes «  nom  » et « prenom  », elle deviennent indépendantes de la table 
+Personne.  
+✓ La clé clé primaire de chacune de ces deux  tables n'est plus une clé étrangère.  
+✓ La table reste vide tant qu’on n’a pas inséré une entité «  Personne  ». 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Table  
+« Personne  » 
+Table  
+« Employe  » 
+Table  
+« Responsable  »  
+
+--------------------

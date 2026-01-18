@@ -1,0 +1,92 @@
+Source File: C:\Users\MSI\Desktop\PROJET ZAYENI\Reference\tps\tp3\Atelier_Framework_spring_01--JPA--Partie-10.pdf
+----------------------------------------
+[Page 1]
+Atelier_ Spring _03_JPA -Partie 10                         -  Mohamed ZAYANI – A.U. 202 4/202 5 Page 1 
+   
+Université Privée du Sud (ULS)  
+Institut Polytechnique  Privé  
+ des Sciences Avancées -Sfax  
+ 
+ 
+  
+Atelier Spring  -03- 
+JPA –Partie10  
+ 
+ Objectifs  
+ 
+• JPA et Spring Data  
+• Mettre en œuvre d’une relation d’héritage JPA  
+• Stratégie  : @Inheritance  : Single Table   
+• Réaliser les requêtes polymorphes  
+•  
+ 
+ 
+ 
+Voici un modèle conceptuel qui modélise une relation d’héritage  : 
+• Une sous -classe «  Responsable  » caractérisé e par un salaire  
+• Une sous -classe «  Employe  » caractérisé e par deux attributs ( numero  et 
+nombreHeures ) 
+• Une classe mère «  Personne  » qui présente les attributs communs ( id, nom  et prenom ) 
+ 
+ 
+ 
+ 
+ 
+
+--------------------
+[Page 2]
+Atelier_ Spring _03_JPA -Partie 10                         -  Mohamed ZAYANI – A.U. 202 4/202 5 Page 2 
+ • La stratégie «  @Inheritance  : Single Table»  
+1. Prendre une copie du projet  «jpa-spring -data -spring -boot -2-relations -3-heritage1 »  
+et le nommer « jpa-spring -data -spring-boot -2-relations -3-heritage2 » 
+ 
+2. Modifier la classe « Personne » (classe mère comme entité) en déclarant les 
+annotations suivantes avant la définition de la classe :  
+…… 
+//pour déclarer une classe mère (entité)  
+@Entity 
+@Inheritance (strategy = InheritanceType. SINGLE_TABLE ) 
+@DiscriminatorColumn (name = "TYPE_PERSONNE" ) 
+@DiscriminatorValue ("Personne" ) 
+public class Personne { 
+         // code de la classe  ...  
+ 
+3. Modifier la classe «Employe » (sous -classe) en déclarant les annotations suivantes avant 
+la définition de la classe :  
+ 
+ 
+@Entity 
+@DiscriminatorValue ("employe" ) 
+public class Employe extends Personne  { 
+  // code la classe ….  
+    
+ 
+4. Modifier le code de l’entité « Responsable » (sous -classe) en déclarant les annotations 
+suivantes avant la définition de la classe :  
+ 
+ 
+@Entity 
+@DiscriminatorValue(" responsable ") 
+public class Responsable   extends Personne  { 
+ // code la classe ….  
+ 
+5. Lancer l’exécution du projet en  utilisant une autre base de données «  spring -jpa-2» 
+(créer cette base de données et la référencer dans le fichier 
+« application.properties  ») et remarquer  : 
+✓  La génération d’une seule table « Personne »  pour toute la hiérarchie  : 
+--------------------
+[Page 3]
+Atelier_ Spring _03_JPA -Partie 10                         -  Mohamed ZAYANI – A.U. 202 4/202 5 Page 3 
+  
+ 
+ 
+✓ Cette table «  Personne  » englobe tous la attributs de tous les sous -classes  : 
+ 
+ 
+    
+✓ La colonne «  type_personne  » permet de distinguer les données de chaque entité.  
+ 
+ 
+ 
+
+--------------------

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head(title='Nouvelle Inscription')}"></head>
+
+<body>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav th:replace="~{fragments/layout :: sidebar}"></nav>
+
+        <!-- Page Content -->
+        <div id="content">
+            <!-- Top Navbar -->
+            <div th:replace="~{fragments/layout :: top-navbar}"></div>
+
+            <div class="main-container">
+
+                <div class="row justify-content-center">
+                    <div class="col-md-8 col-lg-6">
+                        <div class="card shadow-md border-0">
+                            <div class="card-header bg-white pt-4 pb-0 border-0">
+                                <h4 class="mb-0"><i class="fas fa-pen-fancy me-2 text-primary"></i>Nouvelle Inscription
+                                </h4>
+                            </div>
+                            <div class="card-body p-4">
+                                <form th:action="@{/inscription/save}" method="post" th:object="${inscription}">
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Étudiant</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-end-0"><i
+                                                    class="fas fa-user-graduate text-muted"></i></span>
+                                            <select class="form-select border-start-0" th:field="*{etudiant}" required>
+                                                <option value="">-- Sélectionner un Étudiant --</option>
+                                                <option th:each="e : ${etudiants}" th:value="${e.id}"
+                                                    th:text="${e.nom} + ' ' + ${e.prenom} + ' (ID: ' + ${e.id} + ')'">
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Cours</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-end-0"><i
+                                                    class="fas fa-book-open text-muted"></i></span>
+                                            <select class="form-select border-start-0" th:field="*{cours}" required>
+                                                <option value="">-- Sélectionner un Cours --</option>
+                                                <option th:each="c : ${coursList}" th:value="${c.id}"
+                                                    th:text="${c.titre}"></option>
+                                            </select>
+                                        </div>
+                                        <div class="form-text text-muted ps-1">
+                                            <i class="fas fa-info-circle me-1"></i>Un email de confirmation sera envoyé
+                                            à l'étudiant.
+                                        </div>
+                                    </div>
+
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                                        <a th:href="@{/inscription/index}" class="btn btn-light me-md-2">Annuler</a>
+                                        <button type="submit" class="btn btn-primary px-4">Valider
+                                            l'inscription</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head(title='Formulaire Formateur')}"></head>
+
+<body>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav th:replace="~{fragments/layout :: sidebar}"></nav>
+
+        <!-- Page Content -->
+        <div id="content">
+            <!-- Top Navbar -->
+            <div th:replace="~{fragments/layout :: top-navbar}"></div>
+
+            <div class="main-container">
+
+                <div class="row justify-content-center">
+                    <div class="col-md-8 col-lg-6">
+                        <div class="card shadow-md border-0">
+                            <div class="card-header bg-white pt-4 pb-0 border-0">
+                                <h4 class="mb-0"><i class="fas fa-edit me-2 text-primary"></i>Saisie Formateur</h4>
+                            </div>
+                            <div class="card-body p-4">
+                                <form th:action="@{/formateur/save}" method="post" th:object="${formateur}">
+                                    <input type="hidden" th:field="*{id}" />
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Nom Complet</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-end-0"><i
+                                                    class="fas fa-user-tie text-muted"></i></span>
+                                            <input type="text" class="form-control border-start-0" th:field="*{nom}"
+                                                required minlength="2" placeholder="Ex: Jean Dupont" />
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Spécialité</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-end-0"><i
+                                                    class="fas fa-laptop-code text-muted"></i></span>
+                                            <input type="text" class="form-control border-start-0"
+                                                th:field="*{specialite}" required
+                                                placeholder="Ex: Spring Boot, Angular..." />
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Email Professionnel</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-end-0"><i
+                                                    class="fas fa-envelope text-muted"></i></span>
+                                            <input type="email" class="form-control border-start-0" th:field="*{email}"
+                                                required placeholder="jean.dupont@zayeni.com" />
+                                        </div>
+                                    </div>
+
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <a th:href="@{/formateur/index}" class="btn btn-light me-md-2">Annuler</a>
+                                        <button type="submit" class="btn btn-primary px-4">Enregistrer</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+
+</html>

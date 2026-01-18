@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head(title='Mon Profil')}"></head>
+
+<body>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav th:replace="~{fragments/layout :: sidebar}"></nav>
+
+        <!-- Page Content -->
+        <div id="content">
+            <!-- Top Navbar -->
+            <div th:replace="~{fragments/layout :: top-navbar}"></div>
+
+            <div class="main-container">
+
+                <div class="row justify-content-center">
+                    <div class="col-md-6 col-lg-5">
+
+                        <!-- Success Message -->
+                        <div th:if="${message}"
+                            class="alert alert-success d-flex align-items-center mb-4 border-0 shadow-sm">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <span th:text="${message}">Succès</span>
+                        </div>
+
+                        <div class="card shadow-md border-0 text-center">
+                            <div class="card-body p-5">
+                                <div class="mb-4">
+                                    <div class="avatar-circle bg-primary text-white mx-auto d-flex align-items-center justify-content-center mb-3 display-4 fw-bold rounded-circle"
+                                        style="width:80px;height:80px;">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <h4 class="fw-bold text-dark" th:text="${username}">Username</h4>
+                                    <p class="text-muted">Administrateur</p>
+                                </div>
+
+                                <hr class="my-4 op-1">
+
+                                <h5 class="text-start mb-3 small text-uppercase text-muted fw-bold">Sécurité</h5>
+
+                                <form th:action="@{/profile/update}" method="post">
+                                    <div class="mb-3 text-start">
+                                        <label class="form-label">Nouveau Mot de passe</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-end-0"><i
+                                                    class="fas fa-lock text-muted"></i></span>
+                                            <input type="password" name="newPassword"
+                                                class="form-control border-start-0" required minlength="4"
+                                                placeholder="••••••••" />
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100 py-2"><i
+                                            class="fas fa-save me-2"></i>Mettre à jour mot de passe</button>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+
+</html>

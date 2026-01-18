@@ -1,0 +1,247 @@
+/* Import Inter font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design System - Centre de Formation Premium */
+
+@layer base {
+    :root {
+        /* Primary - Bleu Académique */
+        --primary: 217 91% 60%;
+        --primary-foreground: 0 0% 100%;
+        --primary-hover: 217 91% 55%;
+        --primary-muted: 217 91% 95%;
+
+        /* Background & Surfaces */
+        --background: 210 20% 98%;
+        --foreground: 222 47% 11%;
+
+        --card: 0 0% 100%;
+        --card-foreground: 222 47% 11%;
+
+        --popover: 0 0% 100%;
+        --popover-foreground: 222 47% 11%;
+
+        /* Secondary */
+        --secondary: 215 20% 95%;
+        --secondary-foreground: 222 47% 11%;
+
+        /* Muted */
+        --muted: 215 20% 95%;
+        --muted-foreground: 215 16% 47%;
+
+        /* Accent */
+        --accent: 217 91% 97%;
+        --accent-foreground: 217 91% 40%;
+
+        /* Success - Vert */
+        --success: 160 84% 39%;
+        --success-foreground: 0 0% 100%;
+        --success-muted: 160 84% 95%;
+
+        /* Warning - Orange/Ambre */
+        --warning: 38 92% 50%;
+        --warning-foreground: 0 0% 100%;
+        --warning-muted: 38 92% 95%;
+
+        /* Destructive - Rouge */
+        --destructive: 0 84% 60%;
+        --destructive-foreground: 0 0% 100%;
+        --destructive-muted: 0 84% 95%;
+
+        /* Borders & Inputs */
+        --border: 215 20% 90%;
+        --input: 215 20% 90%;
+        --ring: 217 91% 60%;
+
+        --radius: 0.5rem;
+
+        /* Sidebar */
+        --sidebar-background: 0 0% 100%;
+        --sidebar-foreground: 222 47% 11%;
+        --sidebar-primary: 217 91% 60%;
+        --sidebar-primary-foreground: 0 0% 100%;
+        --sidebar-accent: 217 91% 97%;
+        --sidebar-accent-foreground: 217 91% 40%;
+        --sidebar-border: 215 20% 92%;
+        --sidebar-ring: 217 91% 60%;
+
+        /* Chart Colors */
+        --chart-1: 217 91% 60%;
+        --chart-2: 160 84% 39%;
+        --chart-3: 38 92% 50%;
+        --chart-4: 0 84% 60%;
+        --chart-5: 262 80% 50%;
+    }
+
+    .dark {
+        --primary: 217 91% 60%;
+        --primary-foreground: 0 0% 100%;
+
+        --background: 222 47% 6%;
+        --foreground: 210 40% 98%;
+
+        --card: 222 47% 8%;
+        --card-foreground: 210 40% 98%;
+
+        --popover: 222 47% 8%;
+        --popover-foreground: 210 40% 98%;
+
+        --secondary: 217 33% 15%;
+        --secondary-foreground: 210 40% 98%;
+
+        --muted: 217 33% 15%;
+        --muted-foreground: 215 20% 65%;
+
+        --accent: 217 33% 18%;
+        --accent-foreground: 210 40% 98%;
+
+        --success: 160 84% 39%;
+        --success-foreground: 0 0% 100%;
+        --success-muted: 160 50% 15%;
+
+        --warning: 38 92% 50%;
+        --warning-foreground: 0 0% 100%;
+        --warning-muted: 38 50% 15%;
+
+        --destructive: 0 62% 50%;
+        --destructive-foreground: 0 0% 100%;
+        --destructive-muted: 0 50% 15%;
+
+        --border: 217 33% 18%;
+        --input: 217 33% 18%;
+        --ring: 217 91% 60%;
+
+        --sidebar-background: 222 47% 6%;
+        --sidebar-foreground: 210 40% 98%;
+        --sidebar-primary: 217 91% 60%;
+        --sidebar-primary-foreground: 0 0% 100%;
+        --sidebar-accent: 217 33% 15%;
+        --sidebar-accent-foreground: 210 40% 98%;
+        --sidebar-border: 217 33% 15%;
+        --sidebar-ring: 217 91% 60%;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    html {
+        font-family: 'Inter', system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+        @apply bg-background text-foreground;
+        font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    }
+}
+
+@layer utilities {
+
+    /* Premium Shadows */
+    .shadow-soft {
+        box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05);
+    }
+
+    .shadow-card {
+        box-shadow: 0 1px 3px rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.08);
+    }
+
+    .shadow-elevated {
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.08);
+    }
+
+    .shadow-float {
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.08);
+    }
+
+    /* Animations */
+    .animate-fade-in {
+        animation: fadeIn 0.3s ease-out forwards;
+    }
+
+    .animate-slide-up {
+        animation: slideUp 0.3s ease-out forwards;
+    }
+
+    .animate-scale-in {
+        animation: scaleIn 0.2s ease-out forwards;
+    }
+
+    /* Hover Transitions */
+    .transition-smooth {
+        @apply transition-all duration-200 ease-out;
+    }
+
+    .hover-lift {
+        @apply transition-smooth;
+    }
+
+    .hover-lift:hover {
+        transform: translateY(-1px);
+        @apply shadow-elevated;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
+}

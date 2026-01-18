@@ -1,0 +1,67 @@
+Source File: C:\Users\MSI\Desktop\PROJET ZAYENI\Reference\tps\tp6\Atelier_Framework_spring_06_Spring_Security--Partie-02--Stateless.pdf
+----------------------------------------
+[Page 1]
+Atelier_Framewok_Spring_ 06_Spring_Security -Partie -02-State less      -  Mohamed ZAYANI – A.U. 2025/2026  Page 1 
+  
+  
+Université Nord Américaine privée  
+   Institut International Technologie  
+ 
+ 
+  
+Atelier Framework Spring -06 
+Spring Security  
+Partie 0 2- Approche “ State less”  
+  
+Objectifs  
+Réaliser des fonctionnalités web sécurisées avec Spring  Security (Approche « Stateless ») 
+  
+ 
+• Configurer la séc urité en mode « statel ess » 
+• Sécuriser l ’accès aux ressources  
+• Créer un jeton JWT  
+• Ajoute r un filtre pour v érifier le  jeton  
+• Gérer les permiss ions 
+• Tester la procédure d ’authentification par JWT avec l ’outil ARC  
+• Utiliser une application Front -End en PHP pour  accéder aux API 
+REST en utilisant un jWT  
+ 
+ 
+ 
+A. Développement  côté BackEnd  
+ 
+1. Télécharger une application serveur avec Spring Boot qui fournit une API REST sécurisée 
+avec JWT en suivant les étapes suivantes  : 
+a) Accéder  en mode console au dossier " workspace " 
+b) Réaliser un clone du projet Spring Boot  donné en GitHub via la commande suivante:  
+ 
+git   clone     https://github.com/MohamedZayani/backend -spring -rest-jwt.git  
+ 
+2. Suivre les instructions signalées dans le fichier "ReadMe.doc"   
+ 
+Exercice  
+Prendre une copie du projet  «jpa-spring -boot -ServiceWeb -REST -Security -Partie -01-
+Stateful » et le nommer « jpa-spring -boot -ServiceWeb -REST -Security -Partie -01-Stateless » 
+pour appliquer une approche de sécurité Stateless (par jeton JWT) pour sé curiser l es APIs 
+REST par JWT . (Cette fois , les utilisateurs et les rôles sont gérés dans une BD.  
+ 
+
+--------------------
+[Page 2]
+Atelier_Framewok_Spring_ 06_Spring_Security -Partie -02-State less      -  Mohamed ZAYANI – A.U. 2025/2026  Page 2 
+  
+B. Développement côté FrontEnd  
+  
+3. Télécharger une application client avec php  qui consomme l'API REST sécurisée avec JWT 
+comme suit  : 
+c) Accéder  en mode console au dossier " workspace " 
+d) Réaliser un clone du projet PHP  donné en GitHub via la commande suivante:  
+ 
+git  clone   https://github.com/MohamedZayani/frontend -php-rest-jwt-css.git  
+ 
+4. Suivre les instructions signalées dans le fichier "ReadMe.doc"   
+ 
+Exercice  
+Réaliser un projet PHP pour consommer l ’ API REST fourni e par le pr ojet Spring Boot  : 
+«jpa-spring -boot -ServiceWeb -REST -Security -Partie -01-Stateless » 
+--------------------

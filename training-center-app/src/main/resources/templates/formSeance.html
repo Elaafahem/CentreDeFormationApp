@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head(title='Planifier une Séance')}"></head>
+
+<body>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav th:replace="~{fragments/layout :: sidebar}"></nav>
+
+        <!-- Page Content -->
+        <div id="content">
+            <!-- Top Navbar -->
+            <div th:replace="~{fragments/layout :: top-navbar}"></div>
+
+            <div class="main-container">
+
+                <div class="row justify-content-center">
+                    <div class="col-md-8 col-lg-7">
+
+                        <!-- Error Alert -->
+                        <div th:if="${error}"
+                            class="alert alert-danger px-4 py-3 rounded shadow-sm border-0 mb-4 d-flex align-items-center">
+                            <i class="fas fa-exclamation-triangle me-3 fa-lg"></i>
+                            <div>
+                                <h6 class="alert-heading fw-bold mb-1">Conflit de planning détecté</h6>
+                                <span th:text="${error}">Message d'erreur</span>
+                            </div>
+                        </div>
+
+                        <div class="card shadow-md border-0">
+                            <div class="card-header bg-white pt-4 pb-0 border-0">
+                                <h4 class="mb-0"><i class="far fa-calendar-plus me-2 text-primary"></i>Planifier Séance
+                                </h4>
+                            </div>
+                            <div class="card-body p-4">
+                                <form th:action="@{/seance/save}" method="post" th:object="${seance}">
+                                    <input type="hidden" th:field="*{id}" />
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Cours & Formateur</label>
+                                        <select class="form-select" th:field="*{cours}" required>
+                                            <option value="">-- Sélectionner un Cours --</option>
+                                            <option th:each="c : ${coursList}" th:value="${c.id}"
+                                                th:text="${c.titre} + ' (Prof: ' + ${c.formateur.nom} + ')'"></option>
+                                        </select>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Date de la séance</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light border-end-0"><i
+                                                        class="far fa-calendar-alt text-muted"></i></span>
+                                                <input type="date" class="form-control border-start-0"
+                                                    th:field="*{dateSeance}" required />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Salle de cours</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light border-end-0"><i
+                                                        class="fas fa-door-open text-muted"></i></span>
+                                                <input type="text" class="form-control border-start-0"
+                                                    th:field="*{salle}" placeholder="Ex: Salle 101" required />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Heure Début</label>
+                                            <input type="time" class="form-control" th:field="*{heureDebut}" required />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Heure Fin</label>
+                                            <input type="time" class="form-control" th:field="*{heureFin}" required />
+                                        </div>
+                                    </div>
+
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                                        <a th:href="@{/seance/index}" class="btn btn-light me-md-2">Annuler</a>
+                                        <button type="submit" class="btn btn-primary px-4">Confirmer la séance</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+
+</html>

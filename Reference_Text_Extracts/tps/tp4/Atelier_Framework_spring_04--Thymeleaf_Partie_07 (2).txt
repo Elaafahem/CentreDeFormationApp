@@ -1,0 +1,339 @@
+Source File: C:\Users\MSI\Desktop\PROJET ZAYENI\Reference\tps\tp4\Atelier_Framework_spring_04--Thymeleaf_Partie_07 (2).pdf
+----------------------------------------
+[Page 1]
+Atelier_Framewok_Spring_04_Thymeleaf -Partie -07                         -  Mohamed ZAYANI – A.U. 2025/2026  Page 1 
+   
+Université Nord Américaine privée  
+   Institut International Technologie  
+ 
+ 
+  
+Atelier Framework Spring -04 
+Thymeleaf – Partie 0 7 
+ 
+ Objectifs  
+ 
+• Manipulation de  composant s graphiques  avec Thymeleaf  : 
+• un composant «  select  » 
+• un composant «  checkbox  » 
+• un composant «  radio  » 
+ 
+ 
+ 
+ 
+A.  Utilisation d’un composant «select » 
+1. Prendre une copie du projet  «jpa-spring -boot -Thymeleaf 6» et le nommer « jpa-spring -
+boot -Thymeleaf 7». 
+2. Prendre une nouvelle copie de la vue « formProduit.html » pour afficher un  composant 
+« select  » à utiliser pour  choisir une catégorie  au produit à ajouter  : 
+<!DOCTYPE html> 
+<html xmlns:th ="http://www.thymeleaf.org"  
+ xmlns:layout ="http://www.ultraq.net.nz/thymeleaf/layout"  
+ layout:decorate ="~{layout}" > 
+<head> 
+<meta charset="utf-8" /> 
+<title>Fiche Produit </title> 
+<link rel="stylesheet"  type="text/css"  
+ href="../static/css/bootstrap.min.css"  
+ th:href="@{/css/bootstrap.min.css}"  /> 
+<link rel="stylesheet"  type="text/css"  
+ href="../static/css/mon_style.css"  th:href="@{/css/mon_style.css}"  /> 
+</head> 
+<body> 
+ <div layout:fragment ="content" > 
+  <div class="col-md-6 col-sm-6 col-xs-12 spacer col-md-offset-3"> 
+  <div class="panel panel -default" > 
+  <div class="panel-heading" >Saisie d'un produit </div> 
+  <div class="panel-body"> 
+  <form th:action ="@{save}"  method="post" th:object ="${produit}" > 
+       <div class="form-group"> 
+    <label class="control -label">Désignation </label>  
+         <input class="form-control"  type="text" th:field ="*{designation}"  />  
+         <span  class="red" th:errors ="*{designation}" ></span> 
+       </div> 
+       <div class="form-group"> 
+    <label class="control -label">Prix</label>  
+                     <input class="form-control"  type="text" th:field ="*{prix}"  />  
+                     <span  class="red" th:errors ="*{prix}" ></span> 
+   </div> 
+    <div class="form-group"> 
+      <label class="control -label">Quantité </label>  
+
+--------------------
+[Page 2]
+Atelier_Framewok_Spring_04_Thymeleaf -Partie -07                         -  Mohamed ZAYANI – A.U. 2025/2026  Page 2 
+                        <input class="form-control"  type="text" th:field ="*{quantite}"  />  
+                       <span class="red" th:errors ="*{quantite}" ></span> 
+   </div> 
+   <div class="form-group"> 
+    <label class="control -label">Date Achat </label>  
+                    <input class="form-control"  type="date" th:field ="*{dateAchat}"  /> 
+                    <span class="red" th:errors ="*{dateAchat}" ></span> 
+   </div> 
+     <div class="form-group"> 
+    <label class="control -label">Catégorie </label>  
+    <select class="form-control"   
+     th:field ="*{categorie}" > 
+     <option th:each="c:${categories}"  th:value ="${c.id}"  
+      th:text="${c.libelle}"  /> 
+    </select>  
+    <span class="red" th:errors ="*{categorie}" ></span> 
+     </div> 
+   <div> 
+   <button class="btn btn -primary"  type="submit" >Enregistrer </button> 
+   </div> 
+  </form> 
+    </div> 
+    <div class="panel-footer">----Gestion de stock ---</div> 
+   </div> 
+  </div> 
+ </div> 
+</body></html> 
+3. Enregistrer, lancer l’exécution du projet et accéder au lien suivant  : 
+http://localhost:8080/produit/form  
+✓ Remarquer l’ajout d’un composant «  select  » dans le formulaire du produit mais qui 
+ne comporte pas de données (composant vide).  
+ 
+✓ Ce résultat est attendu puisque le modèle (objet « Model ») ne comporte pas 
+l’objet  «categories » qui regroupe la liste des catégories.  
+ 
+
+--------------------
+[Page 3]
+Atelier_Framewok_Spring_04_Thymeleaf -Partie -07                         -  Mohamed ZAYANI – A.U. 2025/2026  Page 3 
+ 4. Pour avoir l’affichage  des catégories dans le composant graphique «select », il est 
+nécessaire de modifier la méthode « formProduit » de la classe « ProduitController » 
+pour ajouter les traitements suivants  : 
+✓ Récupérer l’ensembl e des catégories dans une liste à partir d’un objet repository de 
+type «CategorieRepository » à déclarer.  
+✓ Placer cette liste dans l’objet  «Model » comme un attribut nommé « categories ». 
+✓ Ceci doit être réalisé avant de retourner le nom de la vue à afficher.  
+ 
+5.  Enregistrer la modification et appuyer de nouveau sur le lien «  Fiche Produit  » dans 
+la barre de navigation (menu) et remarquer le remplissage du composant «  select  ».  
+ 
+Exercices  
+ 
+6. Modifier la page «  confirmation.html  » pour afficher le libellé de la catégorie du nouveau 
+produit ajouté suite à une opération d’ajout d’un nouveau produit.  
+ 
+ 
+ 
+7. Modifier la page «  produits .html  » afin  d’ajouter le libellé de la catégorie de chaque 
+produit dans la liste.  
+ 
+ 
+8. Réaliser les modifications nécessaires afin d’ajouter un champ «  select  » dans la page 
+« editProduit .html  ». 
+ 
+
+--------------------
+[Page 4]
+Atelier_Framewok_Spring_04_Thymeleaf -Partie -07                         -  Mohamed ZAYANI – A.U. 2025/2026  Page 4 
+ B. Utilisation des  composant s «checkbox » et «radio»  
+ 
+9. Ajouter, dans la définition de l’entité « Produit », un attribut booléen  nommé «  actif  » 
+pour distinguer entre les produits actifs (en cours d’utilisation) et les produits non actifs 
+(à ne pas utiliser). Définir les méthodes «  setter  » et «  getter  » pour cet attribut.  
+ 
+    private boolean actif; 
+  
+ public boolean isActif() {  
+  return actif; 
+ } 
+ 
+ public void setActif( boolean actif) { 
+  this.actif = actif; 
+ } 
+ 
+10. Enregistrer la modification et remarquer au niveau de la table «  produit  » l’ajout d’une 
+nouvelle colonne «  actif  » de type «  bit » (qui présente «  1 » pour la valeur «  true  » et 
+« 0 » pour la valeur «  false  »). 
+ 
+ 
+11. Au niveau de la vue « formProduit .html », ajout er la déclaration d’un composant 
+« chechbox  » pour spécifier la valeur de l’attribut «  actif  » : 
+ 
+<div class="form-group"> 
+    <label class="control -label">Actif</label>        
+    <input type="checkbox"  th:field ="*{actif}"  th:checked ="*{actif}" /> 
+ 
+    <span class="red" th:errors ="*{categorie}" ></span> 
+</div> 
+12. Enregistrer la modification et afficher le formulaire du produit  : 
+
+--------------------
+[Page 5]
+Atelier_Framewok_Spring_04_Thymeleaf -Partie -07                         -  Mohamed ZAYANI – A.U. 2025/2026  Page 5 
+  
+ 
+ 
+13.Modifier la page «  confirmation.html  » pour afficher si le produit est actif ou nom  : 
+ 
+ 
+ 
+14.Modifier la page «  produits .html  » afin d ’afficher l’information de l’attribut «  actif  » de 
+chaque produit dans la liste.  
+ 
+• Utiliser pour l’affichage de la valeur de l’attribut «  actif  » un composant 
+« radio  » comme suit  : 
+
+--------------------
+[Page 6]
+Atelier_Framewok_Spring_04_Thymeleaf -Partie -07                         -  Mohamed ZAYANI – A.U. 2025/2026  Page 6 
+  
+ <td>  
+       <input type="radio"   
+              th:value ="${p.actif}"     
+              th:checked ="${p.actif}"    
+              disabled   />  
+ </td> 
+ 
+• Enregistrer et remarquer le nouveau style d’affichage  : 
+ 
+15.Réaliser les modifications nécessaires afin d’ajouter un champ «  checkbox  » dans la 
+page «  editProduit .html  » pour l’attribut «  actif  ».  
+ 
+ 
+C. Personnalisation de la méthode de recherché des produits  
+ 
+16. Changer la méthode de recherche dans la vue «  produits.html  » pour filtrer selon l’une 
+des critères suivants  : 
+✓ Afficher tous les produits (actifs et non actifs)  
+✓ Afficher uniquement les produits actifs  
+✓ Afficher uniquement les produits non actifs  
+Ajouter au niveau du formulaire de recherche le code suivant  : 
+ 
+<input type="radio"  th:name="typeProduit"   th:value ="Tous"  > 
+<label>Tous les produits(Actifs et non actifs) </label> 
+<input type="radio" th:name="typeProduit"    th:value ="Actifs"  > 
+<label>Uniquement les produits actifs </label> 
+<input type="radio" th:name="typeProduit"    th:value ="NonActifs"  > 
+<label>Uniquement les produits non actifs </label> 
+    
+17. Enregistrer et visualiser la liste des produits  : 
+ 
+
+--------------------
+[Page 7]
+Atelier_Framewok_Spring_04_Thymeleaf -Partie -07                         -  Mohamed ZAYANI – A.U. 2025/2026  Page 7 
+  
+ 
+18. Afin de récupérer le paramètre du filtre «  typeProduit  » et de personnaliser les requêtes 
+auprès de la BD , prendre  la nouvelle version de la méthode «  index  » dans la classe 
+« ProduitController  » : 
+ 
+// nom logique pour accéder à l'action "index" ou méthode "index  
+  @RequestMapping  (value = "/index" )    
+  public String index (Model model, 
+   // paramètre pour le numero de la page (0 par défaut)  
+   @RequestParam  (name="page" , defaultValue = "0") int p, 
+   // paramètre "motCle"  
+   @RequestParam  (name="motCle" , defaultValue= "") String mc, 
+   // paramètre "typeProduit"  
+@RequestParam  (name="typeProduit" , defaultValue= "Tous") String tp)   
+  { 
+   //déclarer une page de produits  
+   Page <Produit> pg =null; 
+   if (tp.equals( "Tous")) 
+                    // récupérer tous les produits (actifs et non actifs)  
+   { 
+    // récupérer la page numero "p" (de taille 6)  
+   pg = produitRepos .findByDesignationLike( "%"+mc+"%", PageRequest. of(p, 6)); 
+   } 
+   else 
+   { 
+    if (tp.equals( "Actifs" ))  
+                        // récupérer uniquement les produits actifs  
+    { 
+     // récupérer la page numero "p" (de taille 6)  
+      pg = 
+produitRepos .findByDesignationLikeAndActif( "%"+mc+"%",true, PageRequest. of(p, 6)); 
+    } 
+    else 
+    { 
+     if (tp.equals( "NonActifs" ))  
+                               // récupérer uniquement les produits non actifs  
+     { 
+      // récupérer la page numero "p" (de taille 6)  
+       pg = 
+produitRepos .findByDesignationLikeAndActif( "%"+mc+"%",false, PageRequest. of(p, 6)); 
+     } 
+    } 
+
+--------------------
+[Page 8]
+Atelier_Framewok_Spring_04_Thymeleaf -Partie -07                         -  Mohamed ZAYANI – A.U. 2025/2026  Page 8 
+    } 
+   // nombre total des pages  
+   int nbrePages  =pg.getTotalPages();  
+   // créer un tableau d'entier qui contient les numéros des pages  
+   int [] pages = new int[nbrePages ]; 
+   for(int i= 0 ; i< nbrePages ; i++) 
+   { 
+    pages[i]=i; 
+   } 
+   // placer le tableau dans le "Model"  
+   model.addAttribute( "pages", pages); 
+   // placer la page des produits dans le "Model" comme un attribut"  
+   model.addAttribute( "pageProduits" , pg);   
+   // retourner le numéro de la page courante  
+   model.addAttribute( "pageCourante" ,p); 
+   // retourner la valeur du mot clé  
+    model.addAttribute( "motCle" , mc); 
+   // retourner la valeur du typeProduit  
+    model.addAttribute( "typeProduit" , tp); 
+   //retourner le nom de la vue WEB à afficher  
+   return "produits" ;   
+  } 
+ 
+19. Ajouter dans la classe «  ProduitRepository  » la déclaration de la méthode suivante  : 
+ 
+  Page<Produit> findByDesignationLikeAndActif(String mc, 
+boolean actif, Pageable pageable ); 
+ 
+Cette méthode permet de filtrer par l’attribut «  actif  » selon l’argument booléen passé 
+en paramètre.  
+ 
+20. Lancer, maintenant, une recherche sur les produits actifs uniquement  : 
+ 
+21. Remarquer qu’aucun bouton radio n’est sélectionné après la soumission du formulaire. 
+Ceci peut être corrigé par la modification du code des boutons radios comme suit (ajouter 
+un attribut «  th :checked  ») : 
+ 
+
+--------------------
+[Page 9]
+Atelier_Framewok_Spring_04_Thymeleaf -Partie -07                         -  Mohamed ZAYANI – A.U. 2025/2026  Page 9 
+ <input type="radio"  th:name="typeProduit"   th:value ="Tous"  
+th:checked ="${typeProduit=='Tous'}"  > 
+<label>Tous les produits (Actifs et non actifs)</label> 
+     <input type="radio" th:name="typeProduit"    th:value ="Actifs"  
+th:checked ="${typeProduit=='Actifs'}"   > 
+<label>Uniquement  les produits  actifs</label>      
+<input type="radio" th:name="typeProduit"    th:value ="NonActifs"   
+th:checked ="${typeProduit=='NonActifs'}"   > 
+<label>Uniquement  les produits  non actifs</label> 
+ 
+22. Enregistrer et relancer la recherche pour remarquer la synchronisation des données avec 
+le filtre sélectionné.  
+ 
+23.Maintenant, il reste de régler l’affichage des produits filtrés en passant d’une page à une 
+autre. Il suffit de passer le paramètre «  typeProduit  » lors de l’appel à l’url de la page en 
+question  : 
+ 
+     <a th:text ="${p}"  th:href ="@{index(page =${p} , motCle =${motCle} ,typeProduit 
+=${typeProduit})  }"></a> 
+ 
+Exercice  
+24. Ajouter des filtres sur des dates d’achat  : 
+✓ Afficher les produits achetés entre deux dates données  
+✓ Afficher les produits achetés avant une date donnée  
+✓ Afficher les produits achetés après une date donnée  
+ 
+25. Ajouter un filtre sur la catégorie  
+✓ Afficher tous les produits de toutes les catégories  
+✓ Afficher uniquement les produits d’une catégorie 
+donnée  
+ 
+--------------------

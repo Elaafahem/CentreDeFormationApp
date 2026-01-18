@@ -1,0 +1,163 @@
+Source File: C:\Users\MSI\Desktop\PROJET ZAYENI\Reference\tps\tp1\Atelier_Framework_spring_01--Maven--Partie-02 (2).pdf
+----------------------------------------
+[Page 1]
+Atelier_Framewok_Spring_ 01_Maven -Partie -02       -  Mohamed ZAYANI  – A.U. 202 5/202 6 Page 1 
+   
+Université Nord Américaine privée  
+   Institut International Technologie  
+ 
+ 
+  
+Atelier Framework Spring -01 
+Maven -Partie -02 
+Objectifs  
+ 
+• Construire un projet Maven  
+• Configurer un  artéfact  via des commandes Maven  
+• Créer un exemple de projet Maven JAVA  
+• Compiler un programme java avec Maven  
+• Lancer l’exécution d’un projet Maven  
+ 
+ 
+ 
+ 
+A. Créer un exemple standard d’un projet JAVA avec Maven  
+• Nous utilisons « Maven» pour générer la structure d’un projet JAVA d’une 
+manière interactive (préparation d’une arborescence de dossiers conforme 
+à un projet JAVA standard)  
+• «Maven» offre une commande pour construire un projet et spécifier  son type 
+(simple, web , Ejb, spring ,…) en vous demandant d’indiquer un numéro 
+(relatif au modèle voulu). Il est possible de  récupérer cette liste de 
+numéros dans un fichier texte. 
+Pour se faire,  suivre les étapes suivantes  : 
+1. Créer le dossier «D:\Dev\Spring\workspace » qui englobe , désormais, 
+tous les projets de ces ateliers.  
+2. Se positionner avec l’invite de commande dans le dossier :   
+« D:\Dev\Spring\workspace »  
+3. Puis commencer par la création d’un projet JAVA avec l’outil 
+Maven : 
+a) Taper la commande suivante :  
+mvn       archetype:gener ate 
+ 
+ 
+Commande 
+Maven  
+plugin  
+ goal 
+
+--------------------
+[Page 2]
+Atelier_Framewok_Spring_ 01_Maven -Partie -02       -  Mohamed ZAYANI  – A.U. 202 5/202 6 Page 2 
+ L’exécution de cette commande lance le téléchargement des plugins et 
+des dépendances nécessaires à partir du dépôt central de Maven (ce 
+qui nécessite pour la première fois une connexion Internet)  : 
+  
+b) Remarquer que le téléchargement est réalisé dans le dépôt local 
+personnalisé  : «D:\Dev\Outils\Maven\depot_local ». 
+ 
+c) L’exécution de la commande mvn  archetype:generate  permet de 
+générer la structure d’un projet JAVA selon le modèle ( archetype ) 
+spécifié par l’utilisateur. Ainsi le programme invite l’utilisateur 
+de saisir le nombre relatif au modèle voulu  : 
+
+--------------------
+[Page 3]
+Atelier_Framewok_Spring_ 01_Maven -Partie -02       -  Mohamed ZAYANI  – A.U. 202 5/202 6 Page 3 
+  
+d) L’utilisateur peut récupérer le numéro du modèle ( archetype ) désiré 
+à partir de la liste des numéros affichée en mode console ou bien 
+les récupérer dans un fichier comme suit  : 
+• Arrêter le processus  courant à travers un « Ctr + c ». 
+• Relancer la commande en redirigeant la sortie dans un fichier 
+«numeros_archtetypes.txt ». 
+mvn   archetype:generate   >   numeros_archtetypes.txt   
+• Attendre quelques secondes pour générer le f ichier 
+«numeros_archtetypes.txt » dans le même dossier 
+« workspace  » : 
+ 
+• Enfin, arrêter le processus à travers un « Ctr + c ». 
+
+--------------------
+[Page 4]
+Atelier_Framewok_Spring_ 01_Maven -Partie -02       -  Mohamed ZAYANI  – A.U. 202 5/202 6 Page 4 
+ • Chercher dans le fichier « numeros_archtetypes.txt » le numéro 
+qui correspond au modèle  d’un simple projet JAVA  :  
+    org.apache.maven.archetypes:maven -archetype -quickstart  
+ 
+• A l’état actuel de cette version Maven, il s’agit du numéro  : 
+2265. (vérifier le numéro qui convient à votre version ) 
+4. Taper une autre fois la commande  : 
+mvn   archetype:generate  
+5. Un numéro par défaut sera proposé  (2265). C’est le même numéro qui 
+correspond au modèle « maven-archetype -quickstart  » : 
+ 
+
+--------------------
+[Page 5]
+Atelier_Framewok_Spring_ 01_Maven -Partie -02       -  Mohamed ZAYANI  – A.U. 202 5/202 6 Page 5 
+ 6. Dans notre cas , choisir cette valeur par défaut  (2265) en tapant 
+«ENTREE ». 
+7. L’outil « Maven» propose plusieurs versions, choisir la dernière 
+version (elle est déjà proposée ) : 
+ 
+8. Taper « ENTREE » et indiquer les valeurs suivantes pour les paramètres 
+suivants :  
+• groupId   :  dev.ms.maven 
+• artifactId  : premierProjet 
+• version  : 1.0-SNAPSHOT  (prendre la valeur donnée par défaut , 
+en tapant « ENTREE ») 
+• package  : dev.ms.maven (même valeur que «  groupId », prendre 
+la valeur donnée par défaut, en tapant « ENTREE ») 
+9.  Finalement, taper « y » pour confirmer la génération de la structure 
+du projet.  
+10. Ainsi, l’outil Maven indique le succès de la construction d’un 
+projet «  premierProjet  » avec les caractéristiques indiquées  : 
+
+--------------------
+[Page 6]
+Atelier_Framewok_Spring_ 01_Maven -Partie -02       -  Mohamed ZAYANI  – A.U. 202 5/202 6 Page 6 
+  
+11. Remarquer la construction du projet «  premierProjet  » dans le 
+dossier «  workspace  » comportant un fichier source «App.java » : 
+ 
+12. Un projet de type Maven est caractérisé par un fichier «  pom.xml » 
+qui contient la description du projet et les informations nécessaires 
+à sa génération  : 
+
+--------------------
+[Page 7]
+Atelier_Framewok_Spring_ 01_Maven -Partie -02       -  Mohamed ZAYANI  – A.U. 202 5/202 6 Page 7 
+  
+13.  Revenons maintenant au mode console, accéder au dossier racine du 
+projet «  premierProjet  » : 
+ 
+14. Compiler le projet en utilisant l’outil Maven avec le plugin compile 
+mvn   compile 
+
+--------------------
+[Page 8]
+Atelier_Framewok_Spring_ 01_Maven -Partie -02       -  Mohamed ZAYANI  – A.U. 202 5/202 6 Page 8 
+  
+Toujours, lorsque vous utilisez un plugin pour la première fois, Maven 
+télécharge tout d’abord le plugin puis il l’utilise.  
+15. Le plugin « compile» compile tous les fichiers sources JAVA situés 
+sous « src\main\java » (Dans ce cas, il s’agit d’un seul fichier 
+«App.java »). Le résultat de la compilation est enregistré dans un 
+dossier «  target\classes » : 
+ 
+16. Suite à une compilation avec succès, un fichier «  App.class  » est 
+généré sous le dossier  : 
+D:\Dev\Micro_Services \workspace \premierProjet \target\classes\dev\ms\maven 
+ 
+17. Lancer, finalement, l’exécution de la class «  App » en utilisant la 
+commande : 
+
+--------------------
+[Page 9]
+Atelier_Framewok_Spring_ 01_Maven -Partie -02       -  Mohamed ZAYANI  – A.U. 202 5/202 6 Page 9 
+ java    -cp .\target \classes      dev.ms.maven.App  
+ 
+ 
+ 
+
+--------------------

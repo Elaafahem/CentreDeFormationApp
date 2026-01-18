@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head(title='Gestion du Planning')}"></head>
+
+<body>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav th:replace="~{fragments/layout :: sidebar}"></nav>
+
+        <!-- Page Content -->
+        <div id="content">
+            <!-- Top Navbar -->
+            <div th:replace="~{fragments/layout :: top-navbar}"></div>
+
+            <div class="main-container">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold text-dark mb-1">Planning</h2>
+                        <p class="text-muted mb-0">Emploi du temps des séances de formation.</p>
+                    </div>
+                    <a th:href="@{/seance/form}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Nouvelle Séance
+                    </a>
+                </div>
+
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th class="ps-4">Date</th>
+                                        <th>Horaires</th>
+                                        <th>Cours</th>
+                                        <th>Salle</th>
+                                        <th>Formateur</th>
+                                        <th class="text-end pe-4">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="s : ${seances}">
+                                        <td class="ps-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar-initial rounded bg-light text-dark me-3 fw-bold d-flex align-items-center justify-content-center"
+                                                    style="width:45px;height:45px;font-size:0.9rem; flex-direction: column; line-height: 1;">
+                                                    <span class="fw-bold" style="font-size: 1.1rem;"
+                                                        th:text="${#temporals.format(s.dateSeance, 'dd')}">01</span>
+                                                    <span class="text-muted small text-uppercase"
+                                                        style="font-size: 0.65rem;"
+                                                        th:text="${#temporals.format(s.dateSeance, 'MMM')}">JAN</span>
+                                                </div>
+                                                <span class="fw-medium text-dark"
+                                                    th:text="${#temporals.format(s.dateSeance, 'EEEE dd MMMM yyyy')}">Lundi
+                                                    01 Janvier</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-light text-dark border">
+                                                <i class="far fa-clock me-1 text-muted"></i>
+                                                <span th:text="${s.heureDebut} + ' - ' + ${s.heureFin}">09:00 -
+                                                    12:00</span>
+                                            </span>
+                                        </td>
+                                        <td class="fw-semibold text-primary" th:text="${s.cours.titre}">Java</td>
+                                        <td>
+                                            <span
+                                                class="badge bg-light text-dark border-start border-3 border-secondary rounded-0 ps-2"
+                                                th:text="${s.salle}">Salle A1</span>
+                                        </td>
+                                        <td class="text-muted small">
+                                            <i class="fas fa-user-tie me-1"></i>
+                                            <span th:text="${s.cours.formateur.nom}">Prof X</span>
+                                        </td>
+                                        <td class="text-end pe-4">
+                                            <a th:href="@{/seance/delete(id=${s.id})}" class="action-btn delete"
+                                                onclick="return confirm('Êtes-vous sûr de vouloir annuler cette séance ?')"
+                                                title="Annuler">
+                                                <i class="fas fa-times-circle"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <!-- Empty State -->
+                                    <tr th:if="${#lists.isEmpty(seances)}">
+                                        <td colspan="6" class="text-center py-5 text-muted">
+                                            <i class="far fa-calendar-times fa-3x mb-3 opacity-50"></i>
+                                            <p>Aucune séance planifiée.</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+
+</html>

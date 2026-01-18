@@ -1,0 +1,144 @@
+Source File: C:\Users\MSI\Desktop\PROJET ZAYENI\Reference\tps\tp1\Atelier_Framework_spring_01--Maven--Partie-01 (2).pdf
+----------------------------------------
+[Page 1]
+Atelier_ Framewok_Spring_ 01_Maven -Partie -01       -  Mohamed ZAYANI  – A.U. 20 25/202 6 Page 1 
+   
+Université Nord Américaine privée  
+   Institut International Technologie  
+ 
+ 
+  
+Atelier Framework Spring -01 
+Maven -Partie -01 
+Objectifs  
+ 
+• Configurer  l’environnement Maven  
+• Télécharger et Installer JDK (version 21) 
+• Télécharger et Installer Maven  
+ 
+• Configurer les variables d’environnement  
+• Tester la configuration  Maven  
+• Personnaliser le dépôt local de Maven  
+ 
+ 
+A. Télécharger et installer «JDK21» 
+1. Installer JDK21. Voici le lien de téléchargement  : 
+https://www.oracle.com/java/technologies/downloads/#java 21 
+ 
+2. Une fois la JDK est installée, ajouter le chemin du dossier « bin» du JDK21 
+à la variable d’environnement « PATH» (en premier lieu).  Pour se faire, 
+suivre les actions suivantes  : 
+
+--------------------
+[Page 2]
+Atelier_ Framewok_Spring_ 01_Maven -Partie -01       -  Mohamed ZAYANI  – A.U. 20 25/202 6 Page 2 
+ a. Cliquer avec le bouton droit de la souris sur l'icône « Poste de 
+travail » puis sélectionner la commande « Propriétés » : 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+b. Appuyer  sur le bouton « Variables d’environnement »: 
+ 
+c. Ajouter une variable d’environnement «  Système » nommée 
+JAVA_HOME  ayant comme valeur le chemin d’installation de JDK 21: 
+
+--------------------
+[Page 3]
+Atelier_ Framewok_Spring_ 01_Maven -Partie -01       -  Mohamed ZAYANI  – A.U. 20 25/202 6 Page 3 
+ «C:\Program Files \Java\jdk-21» :  (cliquer sur le bouton « Nouvelle » pour 
+ajouter la nouvelle variable)  
+ 
+d. Double cliquer sur la variable  système Path pour ajouter une nouvelle 
+valeur « %JAVA_HOME% \bin» (qui représente le chemin des exécutables de 
+JDK 21) : Utiliser le bouton « Déplacer vers le haut » pour placer la 
+nouvelle valeur en tête de liste. Enfin confirmer l’opération en 
+appuyant sur le bouton « OK». 
+ 
+ 
+ 
+
+--------------------
+[Page 4]
+Atelier_ Framewok_Spring_ 01_Maven -Partie -01       -  Mohamed ZAYANI  – A.U. 20 25/202 6 Page 4 
+  
+e. Ouvrir une fenêtre « Invite de commandes » et tester la configuration de 
+«Java» à travers la commande DOS java   –version : 
+ 
+B. Télécharger et installer l’outil « Maven » 
+1. Voici le l ien de téléchargement  de «Maven» :  
+https://maven.apache.org/download.cgi   
+(la dernière version est maintenant: 3.9.11) 
+
+--------------------
+[Page 5]
+Atelier_ Framewok_Spring_ 01_Maven -Partie -01       -  Mohamed ZAYANI  – A.U. 20 25/202 6 Page 5 
+  
+2. Choisir le type « Binary zip archive » (version 3.9.4  : dernière 
+version actuellement)  
+3. Télécharger le fichier sous «D:\Dev\Outils\Maven» (par exemple)  
+4. Décompresser   le fichier « apache-maven-3.9.4-bin.zip» dans le même 
+dossier.  
+5. Ajouter une variable d'environnement  système MAVEN_HOME  correspondant 
+au chemin : «D:\Dev\Outils\Maven\apache-maven-3.9.4» : 
+ 
+
+--------------------
+[Page 6]
+Atelier_ Framewok_Spring_ 01_Maven -Partie -01       -  Mohamed ZAYANI  – A.U. 20 25/202 6 Page 6 
+ 6. Ajouter la valeur «%MAVEN_HOME% \bin» à la variable d'environnement 
+système PATH  : 
+ 
+7. Ouvrir une fenêtre « Invite de commandes » et tester la configuration de 
+«Maven» à travers la commande DOS mvn    –version (Si tout va bien, les 
+versions de Maven, de JAVA et de Windows  seront affichées dans la 
+console DOS).  
+ 
+ 
+
+--------------------
+[Page 7]
+Atelier_ Framewok_Spring_ 01_Maven -Partie -01       -  Mohamed ZAYANI  – A.U. 20 25/202 6 Page 7 
+ 8. Lancer maintenant la commande  mvn   clean. Cette commande génère une erreur 
+à cause de l’absence d’un projet  de type qui nécessite l’existence d’un 
+fichier « pom.xml» : 
+ 
+9.  Remarquer la génération d’un dossier 
+«C:\Users\[nom_utilisateur] \.m2\repository ».  
+NB : [nom_utilisateur] est le nom de l’utilisateur courant  
+10. Ce dossier consiste le dépôt local de Maven. («C:\Users\HP\» est le 
+dossier racine de l’utilisateur courant)  : 
+ 
+
+--------------------
+[Page 8]
+Atelier_ Framewok_Spring_ 01_Maven -Partie -01       -  Mohamed ZAYANI  – A.U. 20 25/202 6 Page 8 
+ 11.  Il est possible de changer l’emplacement  par défaut du dépôt local de 
+Maven en suivant les instructions suivantes  : 
+a) Copier le fichier «settings.xml » qui existe dans le dossier 
+«D:\Dev\Outils\Maven\apache-maven-3.9.4\conf». 
+ 
+ 
+b) Le coller dans le dossier «C:\Users\HP\.m2» : 
+ 
+ 
+c) Créer un sous dossier «depot_local » sous «D:\Dev\Outils\Maven» : 
+ 
+
+--------------------
+[Page 9]
+Atelier_ Framewok_Spring_ 01_Maven -Partie -01       -  Mohamed ZAYANI  – A.U. 20 25/202 6 Page 9 
+ d) Ouvrir le nouveau fichier « settings.xml » (copié sous « .m2 ») 
+et ajouter la ligne sélectionnée  : 
+ 
+ Ainsi le dépôt local de Maven est désormais  : 
+« D:\Dev\Outils\Maven\depot_local » 
+Désormais, t ous les téléchargements à réaliser par «Maven» (dépendances, 
+plugins..) seront stockés localement dans cet endroit.  
+
+--------------------

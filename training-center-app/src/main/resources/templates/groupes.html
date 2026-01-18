@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head(title='Gestion des Groupes')}"></head>
+
+<body>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav th:replace="~{fragments/layout :: sidebar}"></nav>
+
+        <!-- Page Content -->
+        <div id="content">
+            <!-- Top Navbar -->
+            <div th:replace="~{fragments/layout :: top-navbar}"></div>
+
+            <div class="main-container">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold text-dark mb-1">Groupes d'Étudiants</h2>
+                        <p class="text-muted mb-0">Gestion des classes et niveaux.</p>
+                    </div>
+                    <a th:href="@{/groupe/form}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Nouveau Groupe
+                    </a>
+                </div>
+
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th class="ps-4">Nom du Groupe</th>
+                                        <th>Niveau</th>
+                                        <th>Spécialité</th>
+                                        <th class="text-end pe-4">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="g : ${groupes}">
+                                        <td class="ps-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar-initial rounded bg-soft-info text-info me-3 fw-bold d-flex align-items-center justify-content-center"
+                                                    style="width:40px;height:40px; background-color: #e0f2fe; color: #0284c7;">
+                                                    <i class="fas fa-users"></i>
+                                                </div>
+                                                <span class="fw-semibold text-dark" th:text="${g.nom}">TP1</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-light text-dark border" th:text="${g.niveau}">1ère
+                                                Année</span>
+                                        </td>
+                                        <td class="text-muted" th:text="${g.specialite}">Informatique</td>
+                                        <td class="text-end pe-4">
+                                            <a th:href="@{/groupe/edit(id=${g.id})}" class="action-btn edit me-2"
+                                                title="Éditer">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a th:href="@{/groupe/delete(id=${g.id})}" class="action-btn delete"
+                                                onclick="return confirm('Êtes-vous sûr ?')" title="Supprimer">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <!-- Empty State -->
+                                    <tr th:if="${#lists.isEmpty(groupes)}">
+                                        <td colspan="4" class="text-center py-5 text-muted">
+                                            <i class="fas fa-users-slash fa-3x mb-3 opacity-50"></i>
+                                            <p>Aucun groupe créé.</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+
+</html>

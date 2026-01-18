@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head(title='Formulaire Cours')}"></head>
+
+<body>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav th:replace="~{fragments/layout :: sidebar}"></nav>
+
+        <!-- Page Content -->
+        <div id="content">
+            <!-- Top Navbar -->
+            <div th:replace="~{fragments/layout :: top-navbar}"></div>
+
+            <div class="main-container">
+
+                <div class="row justify-content-center">
+                    <div class="col-md-8 col-lg-7">
+                        <div class="card shadow-md border-0">
+                            <div class="card-header bg-white pt-4 pb-0 border-0">
+                                <h4 class="mb-0"><i class="fas fa-edit me-2 text-primary"></i>Saisie Cours</h4>
+                            </div>
+                            <div class="card-body p-4">
+                                <form th:action="@{/cours/save}" method="post" th:object="${cours}">
+                                    <input type="hidden" th:field="*{id}" />
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Code du Cours</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-end-0"><i
+                                                    class="fas fa-barcode text-muted"></i></span>
+                                            <input type="text" class="form-control border-start-0" th:field="*{code}"
+                                                required placeholder="Ex: CRS-001" />
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Titre du Cours</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-end-0"><i
+                                                    class="fas fa-heading text-muted"></i></span>
+                                            <input type="text" class="form-control border-start-0" th:field="*{titre}"
+                                                required placeholder="Ex: Développement Web Avancé" />
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Description</label>
+                                        <textarea class="form-control" th:field="*{description}" rows="4"
+                                            placeholder="Description détaillée du contenu..."
+                                            style="border-radius: 6px;"></textarea>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Formateur Responsable</label>
+                                        <select class="form-select" th:field="*{formateur}">
+                                            <option value="">-- Sélectionner --</option>
+                                            <option th:each="f : ${formateurs}" th:value="${f.id}"
+                                                th:text="${f.nom} + ' (' + ${f.specialite} + ')'"></option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Assigner aux Groupes</label>
+                                        <select class="form-select" th:field="*{groupes}" multiple>
+                                            <option th:each="g : ${groupes}" th:value="${g.id}"
+                                                th:text="${g.nom} + ' (' + ${g.niveau} + ')'"></option>
+                                        </select>
+                                        <div class="form-text text-muted">Maintenez Ctrl pour sélectionner plusieurs
+                                            groupes.</div>
+                                    </div>
+
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                                        <a th:href="@{/cours/index}" class="btn btn-light me-md-2">Annuler</a>
+                                        <button type="submit" class="btn btn-primary px-4">Enregistrer</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+
+</html>

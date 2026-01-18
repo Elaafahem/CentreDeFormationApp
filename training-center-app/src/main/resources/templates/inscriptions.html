@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head(title='Gestion des Inscriptions')}"></head>
+
+<body>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav th:replace="~{fragments/layout :: sidebar}"></nav>
+
+        <!-- Page Content -->
+        <div id="content">
+            <!-- Top Navbar -->
+            <div th:replace="~{fragments/layout :: top-navbar}"></div>
+
+            <div class="main-container">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold text-dark mb-1">Inscriptions</h2>
+                        <p class="text-muted mb-0">Gestion des enrôlements aux cours.</p>
+                    </div>
+                    <a th:href="@{/inscription/form}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Nouvelle Inscription
+                    </a>
+                </div>
+
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th class="ps-4">Étudiant</th>
+                                        <th>Cours</th>
+                                        <th>Date d'inscription</th>
+                                        <th class="text-center">Suivi</th>
+                                        <th class="text-end pe-4">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="i : ${inscriptions}">
+                                        <td class="ps-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar-initial rounded-circle bg-light text-primary me-3 fw-bold d-flex align-items-center justify-content-center"
+                                                    style="width:35px;height:35px;font-size:0.9rem;">
+                                                    <span th:text="${#strings.substring(i.etudiant.nom,0,1)}">N</span>
+                                                </div>
+                                                <span class="fw-medium"
+                                                    th:text="${i.etudiant.nom} + ' ' + ${i.etudiant.prenom}">Nom
+                                                    Prénom</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="fw-semibold text-dark" th:text="${i.cours.titre}">Cours</span>
+                                        </td>
+                                        <td class="text-muted">
+                                            <i class="far fa-calendar-alt me-1"></i>
+                                            <span
+                                                th:text="${#dates.format(i.dateInscription, 'dd/MM/yyyy')}">01/01/2024</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <a th:href="@{/note/index(inscriptionId=${i.id})}"
+                                                class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                                <i class="fas fa-graduation-cap me-1"></i>Notes
+                                            </a>
+                                        </td>
+                                        <td class="text-end pe-4">
+                                            <a th:href="@{/inscription/delete(id=${i.id})}" class="action-btn delete"
+                                                onclick="return confirm('Êtes-vous sûr de vouloir annuler cette inscription ? Cette action supprimera également les notes !')"
+                                                title="Supprimer">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <!-- Empty State -->
+                                    <tr th:if="${#lists.isEmpty(inscriptions)}">
+                                        <td colspan="5" class="text-center py-5 text-muted">
+                                            <i class="fas fa-clipboard-list fa-3x mb-3 opacity-50"></i>
+                                            <p>Aucune inscription enregistrée.</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+
+</html>

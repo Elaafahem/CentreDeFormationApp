@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head(title='Tableau de Bord')}"></head>
+
+<body>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav th:replace="~{fragments/layout :: sidebar}"></nav>
+
+        <!-- Page Content -->
+        <div id="content">
+            <!-- Top Navbar -->
+            <div th:replace="~{fragments/layout :: top-navbar}"></div>
+
+            <div class="main-container">
+
+                <!-- KPI Cards -->
+                <div class="row mb-5">
+                    <div class="col-md-4">
+                        <div class="card p-4 border-0 shadow-sm"
+                            style="border-left: 5px solid var(--primary-color) !important;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-muted text-uppercase fw-bold mb-2">Total Étudiants</h6>
+                                    <h2 class="fw-bold text-dark mb-0" th:text="${counts['etudiants']}">0</h2>
+                                </div>
+                                <div class="icon-shape bg-light text-primary rounded-circle p-3">
+                                    <i class="fas fa-user-graduate fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card p-4 border-0 shadow-sm"
+                            style="border-left: 5px solid var(--success-color) !important;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-muted text-uppercase fw-bold mb-2">Cours Actifs</h6>
+                                    <h2 class="fw-bold text-dark mb-0" th:text="${counts['cours']}">0</h2>
+                                </div>
+                                <div class="icon-shape bg-light text-success rounded-circle p-3">
+                                    <i class="fas fa-book-open fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card p-4 border-0 shadow-sm"
+                            style="border-left: 5px solid var(--warning-color) !important;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-muted text-uppercase fw-bold mb-2">Formateurs</h6>
+                                    <h2 class="fw-bold text-dark mb-0" th:text="${counts['formateurs']}">0</h2>
+                                </div>
+                                <div class="icon-shape bg-light text-warning rounded-circle p-3">
+                                    <i class="fas fa-chalkboard-teacher fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course Stats Table -->
+                <div class="card">
+                    <div
+                        class="card-header d-flex justify-content-between align-items-center bg-white border-0 pt-4 px-4 pb-0">
+                        <h3 class="fw-bold"><i class="fas fa-chart-bar me-2"></i>Performances des Cours</h3>
+                        <button class="btn btn-sm btn-outline-primary"><i
+                                class="fas fa-download me-1"></i>Exporter</button>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th>Titre du Cours</th>
+                                        <th class="text-center">Inscrits</th>
+                                        <th class="text-center">Moyenne</th>
+                                        <th class="text-center">Taux de Réussite</th>
+                                        <th class="text-end">Statut</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="stat : ${courseStats}">
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar-initial rounded bg-primary text-white me-3 fw-bold p-2 d-flex align-items-center justify-content-center"
+                                                    style="width:40px;height:40px;opacity:0.8;">
+                                                    <span th:text="${#strings.substring(stat.titre,0,1)}">C</span>
+                                                </div>
+                                                <span class="fw-semibold text-dark" th:text="${stat.titre}">Maths</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-center fw-bold text-secondary" th:text="${stat.inscrits}">25
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge"
+                                                th:classappend="${stat.moyenne >= 10 ? 'bg-success-soft' : 'bg-danger-soft'}"
+                                                th:text="${stat.moyenne} + ' / 20'">
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="d-flex align-items-center justify-content-center">
+                                                <span class="me-2 text-muted small"
+                                                    th:text="${stat.tauxReussite} + '%'">75%</span>
+                                                <div class="progress flex-grow-1"
+                                                    style="height: 6px; max-width: 100px;">
+                                                    <div class="progress-bar rounded" role="progressbar"
+                                                        th:classappend="${stat.tauxReussite >= 50 ? 'bg-success' : 'bg-warning'}"
+                                                        th:style="'width: ' + ${stat.tauxReussite} + '%'">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-end">
+                                            <button class="btn btn-sm btn-light text-muted"><i
+                                                    class="fas fa-ellipsis-v"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+
+</html>
