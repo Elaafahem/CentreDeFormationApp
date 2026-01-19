@@ -24,4 +24,6 @@ public interface InscriptionRepository extends JpaRepository<Inscription, Long> 
             @org.springframework.data.repository.query.Param("formateurId") Long formateurId);
 
     Inscription findByEtudiantAndCours(Etudiant etudiant, Cours cours);
+
+    List<Inscription> findByEtudiant_Groupe_IdAndCours_Id(Long groupeId, Long coursId);
 }

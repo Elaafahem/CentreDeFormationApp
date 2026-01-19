@@ -43,6 +43,12 @@
                                         </div>
                                     </div>
 
+                                    <div class="mb-4 form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="active"
+                                            th:field="*{active}">
+                                        <label class="form-check-label" for="active">Session Active (En cours)</label>
+                                    </div>
+
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                         <a th:href="@{/session/index}" class="btn btn-light me-md-2">Annuler</a>
                                         <button type="submit" class="btn btn-primary px-4">Enregistrer</button>

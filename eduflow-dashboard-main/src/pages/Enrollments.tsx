@@ -42,6 +42,7 @@ export default function Enrollments() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedEnrollment, setSelectedEnrollment] = useState<Enrollment | null>(null);
+  const [selectedCourse, setSelectedCourse] = useState<string>("all");
   const [formData, setFormData] = useState({
     etudiantId: "",
     coursId: ""
@@ -78,11 +79,22 @@ export default function Enrollments() {
   });
 
   const { data: courses = [] } = useQuery({
-    queryKey: ['courses'],
+    queryKey: ['courses', user?.role, user?.username],
     queryFn: async () => {
-      const res = await apiFetch('http://localhost:8080/api/cours');
+      const params = new URLSearchParams();
+      if (user?.role === 'FORMATEUR') params.append('formateurEmail', user.username);
+      if (user?.role === 'ETUDIANT') params.append('etudiantEmail', user.username);
+
+      const res = await apiFetch(`http://localhost:8080/api/cours?${params.toString()}`);
       return res.json();
     },
+  });
+
+  const filteredEnrollments = enrollments.filter((enrollment: any) => {
+    if (selectedCourse && selectedCourse !== "all") {
+      return enrollment.coursId === selectedCourse;
+    }
+    return true;
   });
 
   const saveMutation = useMutation({
@@ -259,21 +271,39 @@ export default function Enrollments() {
               Gérez les demandes d'inscription des étudiants aux cours.
             </p>
           </div>
-          <Button onClick={() => setIsDialogOpen(true)}>
-            <Plus className="h-4 w-4 mr-2" />
-            Nouvelle inscription
-          </Button>
+          {user?.role === 'ADMIN' && (
+            <Button onClick={() => setIsDialogOpen(true)}>
+              <Plus className="h-4 w-4 mr-2" />
+              Nouvelle inscription
+            </Button>
+          )}
         </div>
 
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-4 items-center justify-between">
           <div className="bg-card rounded-xl border shadow-card p-3 min-w-[200px] w-fit">
             <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Volume d'Inscriptions</span>
             <p className="text-xl font-bold text-foreground mt-0.5">{enrollments.length} inscriptions</p>
           </div>
+
+          <div className="w-[300px]">
+            <Select value={selectedCourse} onValueChange={setSelectedCourse}>
+              <SelectTrigger>
+                <SelectValue placeholder="Filtrer par cours" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Tous les cours</SelectItem>
+                {courses.map((course: any) => (
+                  <SelectItem key={course.id} value={course.id.toString()}>
+                    {course.titre}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         <DataTable
-          data={enrollments}
+          data={filteredEnrollments}
           columns={columns}
           searchPlaceholder="Rechercher une inscription..."
           searchKey="etudiant"

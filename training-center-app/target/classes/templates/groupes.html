@@ -18,58 +18,93 @@
 
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
-                        <h2 class="fw-bold text-dark mb-1">Groupes d'Étudiants</h2>
-                        <p class="text-muted mb-0">Gestion des classes et niveaux.</p>
+                        <h2 class="fw-bold text-dark mb-1">Gestion des Groupes</h2>
+                        <p class="text-muted mb-0">Organisation des classes et cohortes d'étudiants.</p>
                     </div>
-                    <a th:href="@{/groupe/form}" class="btn btn-primary">
-                        <i class="fas fa-plus me-2"></i>Nouveau Groupe
-                    </a>
+                    <div class="d-flex gap-2">
+                        <a th:href="@{/groupe/form}" class="btn btn-info shadow-sm text-white fw-bold">
+                            <i class="fas fa-plus me-2"></i>Nouveau Groupe
+                        </a>
+                    </div>
                 </div>
 
-                <div class="card">
+                <div class="card border-0 shadow-sm overflow-hidden">
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <table class="table table-hover align-middle mb-0">
-                                <thead class="bg-light">
+                                <thead class="bg-light text-muted">
                                     <tr>
-                                        <th class="ps-4">Nom du Groupe</th>
-                                        <th>Niveau</th>
-                                        <th>Spécialité</th>
-                                        <th class="text-end pe-4">Actions</th>
+                                        <th class="ps-4 py-3">Groupe</th>
+                                        <th class="py-3">Niveau d'études</th>
+                                        <th class="py-3">Filière / Spécialité</th>
+                                        <th class="text-end pe-4 py-3">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:each="g : ${groupes}">
+                                    <tr th:each="g : ${groupes}" class="transition-all">
                                         <td class="ps-4">
                                             <div class="d-flex align-items-center">
-                                                <div class="avatar-initial rounded bg-soft-info text-info me-3 fw-bold d-flex align-items-center justify-content-center"
-                                                    style="width:40px;height:40px; background-color: #e0f2fe; color: #0284c7;">
-                                                    <i class="fas fa-users"></i>
+                                                <div class="me-3">
+                                                    <div class="rounded bg-info-soft d-flex align-items-center justify-content-center shadow-sm"
+                                                        style="width: 44px; height: 44px; color: #0891b2;">
+                                                        <i class="fas fa-users"></i>
+                                                    </div>
                                                 </div>
-                                                <span class="fw-semibold text-dark" th:text="${g.nom}">TP1</span>
+                                                <div>
+                                                    <a th:href="@{/groupe/etudiants(id=${g.id})}"
+                                                        class="mb-0 fw-bold text-dark text-decoration-none group-link"
+                                                        th:text="${g.nom}">Groupe Name</a>
+                                                    <small class="text-muted d-block">Cohort 2024</small>
+                                                </div>
                                             </div>
                                         </td>
                                         <td>
-                                            <span class="badge bg-light text-dark border" th:text="${g.niveau}">1ère
-                                                Année</span>
+                                            <span class="badge bg-light text-dark px-3 rounded-pill border fw-medium"
+                                                th:text="${g.niveau}">Niveau</span>
                                         </td>
-                                        <td class="text-muted" th:text="${g.specialite}">Informatique</td>
+                                        <td>
+                                            <span class="text-secondary small fw-medium">
+                                                <i class="fas fa-layer-group me-1 text-info" style="opacity: 0.7;"></i>
+                                                <span th:text="${g.specialite}">Informatique</span>
+                                            </span>
+                                        </td>
                                         <td class="text-end pe-4">
-                                            <a th:href="@{/groupe/edit(id=${g.id})}" class="action-btn edit me-2"
-                                                title="Éditer">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <a th:href="@{/groupe/delete(id=${g.id})}" class="action-btn delete"
-                                                onclick="return confirm('Êtes-vous sûr ?')" title="Supprimer">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </a>
+                                            <div class="d-flex justify-content-end gap-2">
+                                                <a th:href="@{/groupe/etudiants(id=${g.id})}"
+                                                    class="btn btn-sm btn-outline-info border-0 rounded-circle"
+                                                    style="width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center;"
+                                                    title="Voir les étudiants">
+                                                    <i class="fas fa-external-link-alt small"></i>
+                                                </a>
+                                                <a th:href="@{/groupe/edit(id=${g.id})}"
+                                                    class="btn btn-sm btn-outline-info border-0 rounded-circle"
+                                                    style="width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center;"
+                                                    title="Modifier">
+                                                    <i class="fas fa-edit small"></i>
+                                                </a>
+                                                <a th:href="@{/groupe/delete(id=${g.id})}"
+                                                    class="btn btn-sm btn-outline-danger border-0 rounded-circle"
+                                                    style="width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center;"
+                                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce groupe ?')"
+                                                    title="Supprimer">
+                                                    <i class="fas fa-trash-alt small"></i>
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                     <!-- Empty State -->
                                     <tr th:if="${#lists.isEmpty(groupes)}">
-                                        <td colspan="4" class="text-center py-5 text-muted">
-                                            <i class="fas fa-users-slash fa-3x mb-3 opacity-50"></i>
-                                            <p>Aucun groupe créé.</p>
+                                        <td colspan="4" class="text-center py-5">
+                                            <div class="py-4">
+                                                <i class="fas fa-users-slash fa-4x text-light mb-4"></i>
+                                                <h5 class="text-muted fw-bold">Aucun groupe trouvé</h5>
+                                                <p class="text-muted mx-auto" style="max-width: 300px;">Organisez vos
+                                                    étudiants en créant votre premier groupe d'étude.</p>
+                                                <a th:href="@{/groupe/form}"
+                                                    class="btn btn-info mt-2 shadow-sm text-white fw-bold">
+                                                    <i class="fas fa-plus me-2"></i>Créer un groupe
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -83,6 +118,24 @@
     </div>
 
     <div th:replace="~{fragments/layout :: scripts}"></div>
+
+    <style>
+        .bg-info-soft {
+            background-color: rgba(8, 145, 178, 0.1);
+        }
+
+        .transition-all {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .table tbody tr:hover {
+            background-color: rgba(8, 145, 178, 0.02);
+        }
+
+        .group-link:hover {
+            color: #0891b2 !important;
+        }
+    </style>
 </body>
 
 </html>

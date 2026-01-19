@@ -27,6 +27,15 @@
                                     <input type="hidden" th:field="*{id}" />
 
                                     <div class="mb-3">
+                                        <label class="form-label">Session Pédagogique</label>
+                                        <select class="form-select" th:field="*{session}">
+                                            <option value="">-- Sélectionner une session --</option>
+                                            <option th:each="s : ${sessions}" th:value="${s.id}"
+                                                th:text="${s.nom} + (${s.active} ? ' (En cours)' : '')"></option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
                                         <label class="form-label">Nom du Groupe</label>
                                         <input type="text" class="form-control" th:field="*{nom}" required
                                             placeholder="Ex: TP1, GL2..." />

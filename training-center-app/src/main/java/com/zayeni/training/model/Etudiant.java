@@ -17,6 +17,8 @@ import jakarta.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 import jakarta.persistence.Transient;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 public class Etudiant implements Serializable {
@@ -50,6 +52,10 @@ public class Etudiant implements Serializable {
 
     @ManyToOne
     private Groupe groupe;
+
+    @jakarta.persistence.OneToMany(mappedBy = "etudiant", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    private List<Inscription> inscriptions = new ArrayList<>();
 
     @Transient
     @JsonProperty("moyenne")
@@ -130,6 +136,14 @@ public class Etudiant implements Serializable {
 
     public void setMoyenne(Double moyenne) {
         this.moyenne = moyenne;
+    }
+
+    public List<Inscription> getInscriptions() {
+        return inscriptions;
+    }
+
+    public void setInscriptions(List<Inscription> inscriptions) {
+        this.inscriptions = inscriptions;
     }
 
     @Override

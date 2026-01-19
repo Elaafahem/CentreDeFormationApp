@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.zayeni.training.model.Groupe;
 import com.zayeni.training.service.GroupeService;
+import com.zayeni.training.service.EtudiantService;
+import com.zayeni.training.service.SessionService;
+import com.zayeni.training.repository.NoteRepository;
 
 @Controller
 @RequestMapping("/groupe")
@@ -19,21 +22,48 @@ public class GroupeController {
     @Autowired
     private GroupeService groupeService;
 
+    @Autowired
+    private EtudiantService etudiantService;
+
+    @Autowired
+    private SessionService sessionService;
+
+    @Autowired
+    private NoteRepository noteRepository;
+
     @GetMapping("/index")
     public String index(Model model) {
         model.addAttribute("groupes", groupeService.findAll());
         return "groupes";
     }
 
+    @GetMapping("/etudiants")
+    public String showGroupeEtudiants(@RequestParam("id") Long id, Model model) {
+        Groupe groupe = groupeService.findById(id);
+        var etudiants = etudiantService.findByGroupeId(id);
+
+        // Calculate average for each student
+        etudiants.forEach(e -> {
+            Double avg = noteRepository.findAverageByEtudiant(e.getId());
+            e.setMoyenne(avg != null ? Math.round(avg * 100.0) / 100.0 : 0.0);
+        });
+
+        model.addAttribute("groupe", groupe);
+        model.addAttribute("etudiants", etudiants);
+        return "groupe-etudiants";
+    }
+
     @GetMapping("/form")
     public String formGroupe(Model model) {
         model.addAttribute("groupe", new Groupe());
+        model.addAttribute("sessions", sessionService.findAll());
         return "formGroupe";
     }
 
     @GetMapping("/edit")
     public String editGroupe(@RequestParam("id") Long id, Model model) {
         model.addAttribute("groupe", groupeService.findById(id));
+        model.addAttribute("sessions", sessionService.findAll());
         return "formGroupe";
     }
 

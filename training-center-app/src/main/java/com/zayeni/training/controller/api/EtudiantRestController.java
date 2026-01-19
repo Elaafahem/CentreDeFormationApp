@@ -30,8 +30,15 @@ public class EtudiantRestController {
     private NoteRepository noteRepo;
 
     @GetMapping
-    public List<Etudiant> getAll() {
-        List<Etudiant> etudiants = etudiantService.findAll();
+    public List<Etudiant> getAll(
+            @org.springframework.web.bind.annotation.RequestParam(required = false) Long groupeId) {
+        List<Etudiant> etudiants;
+        if (groupeId != null) {
+            etudiants = etudiantService.findByGroupeId(groupeId);
+        } else {
+            etudiants = etudiantService.findAll();
+        }
+
         etudiants.forEach(e -> {
             Double avg = noteRepo.findAverageByEtudiant(e.getId());
             e.setMoyenne(avg != null ? Math.round(avg * 100.0) / 100.0 : 0.0);

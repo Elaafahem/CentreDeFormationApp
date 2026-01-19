@@ -177,7 +177,7 @@ public class DatabaseSeeder implements CommandLineRunner {
 
                 // Check if already enrolled
                 if (inscriptionRepo.findByEtudiantAndCours(s, c) == null) {
-                    Inscription ins = new Inscription(new Date(), s, c);
+                    Inscription ins = new Inscription(java.time.LocalDate.now(), s, c);
                     inscriptionRepo.save(ins);
 
                     // Add a mock note

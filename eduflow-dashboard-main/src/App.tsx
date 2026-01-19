@@ -8,16 +8,11 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
-import Students from "./pages/Students";
-import Trainers from "./pages/Trainers";
 import Courses from "./pages/Courses";
 import Enrollments from "./pages/Enrollments";
 import Grades from "./pages/Grades";
 import Schedule from "./pages/Schedule";
 import Settings from "./pages/Settings";
-import Specialties from "./pages/Specialties";
-import Sessions from "./pages/Sessions";
-import Groups from "./pages/Groups";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient({
@@ -43,48 +38,21 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
 
-            {/* Protected routes - Dashboard accessible to all authenticated users */}
+            {/* Protected routes - Dashboard accessible to Students and Trainers */}
             <Route path="/" element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['ETUDIANT', 'FORMATEUR']}>
                 <Dashboard />
               </ProtectedRoute>
             } />
 
-            {/* Admin-only routes */}
-            <Route path="/students" element={
-              <ProtectedRoute allowedRoles={['ADMIN']}>
-                <Students />
-              </ProtectedRoute>
-            } />
-            <Route path="/trainers" element={
-              <ProtectedRoute allowedRoles={['ADMIN']}>
-                <Trainers />
-              </ProtectedRoute>
-            } />
-            <Route path="/specialties" element={
-              <ProtectedRoute allowedRoles={['ADMIN']}>
-                <Specialties />
-              </ProtectedRoute>
-            } />
-            <Route path="/sessions" element={
-              <ProtectedRoute allowedRoles={['ADMIN']}>
-                <Sessions />
-              </ProtectedRoute>
-            } />
-            <Route path="/groups" element={
-              <ProtectedRoute allowedRoles={['ADMIN']}>
-                <Groups />
-              </ProtectedRoute>
-            } />
-
-            {/* Admin, Formateur and Student routes */}
+            {/* Formateur and Student routes */}
             <Route path="/courses" element={
-              <ProtectedRoute allowedRoles={['ADMIN', 'FORMATEUR', 'ETUDIANT']}>
+              <ProtectedRoute allowedRoles={['FORMATEUR', 'ETUDIANT']}>
                 <Courses />
               </ProtectedRoute>
             } />
             <Route path="/grades" element={
-              <ProtectedRoute allowedRoles={['ADMIN', 'FORMATEUR', 'ETUDIANT']}>
+              <ProtectedRoute allowedRoles={['FORMATEUR', 'ETUDIANT']}>
                 <Grades />
               </ProtectedRoute>
             } />

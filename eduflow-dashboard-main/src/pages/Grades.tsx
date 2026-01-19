@@ -53,6 +53,10 @@ const getGradeLabel = (note: number) => {
 export default function Grades() {
   const [grades, setGrades] = useState<Grade[]>([]);
   const [enrollments, setEnrollments] = useState<any[]>([]);
+  const [courses, setCourses] = useState<any[]>([]);
+  const [groups, setGroups] = useState<any[]>([]);
+  const [selectedCourse, setSelectedCourse] = useState<string>("all");
+  const [selectedGroup, setSelectedGroup] = useState<string>("all");
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -82,7 +86,8 @@ export default function Grades() {
           cours: d.inscription.cours.titre,
           note: d.valeur,
           dateEvaluation: d.inscription.dateInscription,
-          commentaire: d.appreciation || ''
+          commentaire: d.appreciation || '',
+          groupeId: d.inscription.etudiant.groupe ? d.inscription.etudiant.groupe.id.toString() : '0'
         }));
         setGrades(adaptedGrades);
         setLoading(false);
@@ -108,12 +113,58 @@ export default function Grades() {
       .catch(err => console.error("Error fetching enrollments:", err));
   };
 
+  const fetchCourses = () => {
+    const params = new URLSearchParams();
+    if (user?.role === 'FORMATEUR') params.append('formateurEmail', user.username);
+    if (user?.role === 'ETUDIANT') params.append('etudiantEmail', user.username);
+
+    const url = params.toString()
+      ? `http://localhost:8080/api/cours?${params.toString()}`
+      : 'http://localhost:8080/api/cours';
+
+    apiFetch(url)
+      .then(res => res.json())
+      .then(data => setCourses(data))
+      .catch(err => console.error("Error fetching courses:", err));
+  };
+
+  const fetchGroups = () => {
+    const params = new URLSearchParams();
+    if (user?.role === 'FORMATEUR') params.append('formateurEmail', user.username);
+
+    const url = params.toString()
+      ? `http://localhost:8080/api/groupes?${params.toString()}`
+      : 'http://localhost:8080/api/groupes';
+
+    apiFetch(url)
+      .then(res => res.json())
+      .then(data => setGroups(data))
+      .catch(err => console.error("Error fetching groups:", err));
+  };
+
   useEffect(() => {
     if (user) {
       fetchGrades();
       fetchEnrollments();
+      fetchCourses();
+      fetchGroups();
     }
   }, [user?.username, user?.role]);
+
+  const filteredGrades = grades.filter((grade: any) => {
+    let matchesCourse = true;
+    let matchesGroup = true;
+
+    if (selectedCourse && selectedCourse !== "all") {
+      matchesCourse = grade.coursId === selectedCourse;
+    }
+
+    if (selectedGroup && selectedGroup !== "all") {
+      matchesGroup = grade.groupeId === selectedGroup;
+    }
+
+    return matchesCourse && matchesGroup;
+  });
 
   const handleOpenAdd = () => {
     setSelectedGrade(null);
@@ -327,6 +378,41 @@ export default function Grades() {
           )}
         </div>
 
+        <div className="flex flex-wrap gap-4 items-center justify-end">
+          {user?.role !== 'ETUDIANT' && (
+            <div className="w-[200px]">
+              <Select value={selectedGroup} onValueChange={setSelectedGroup}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Filtrer par groupe" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Tous les groupes</SelectItem>
+                  {groups.map((group: any) => (
+                    <SelectItem key={group.id} value={group.id.toString()}>
+                      {group.nom}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+          <div className="w-[200px]">
+            <Select value={selectedCourse} onValueChange={setSelectedCourse}>
+              <SelectTrigger>
+                <SelectValue placeholder="Filtrer par cours" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Tous les cours</SelectItem>
+                {courses.map((course: any) => (
+                  <SelectItem key={course.id} value={course.id.toString()}>
+                    {course.titre}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-card rounded-xl border shadow-card p-4">
             <div className="flex items-center justify-between">
@@ -357,7 +443,7 @@ export default function Grades() {
         </div>
 
         <DataTable
-          data={grades}
+          data={filteredGrades}
           columns={columns}
           searchPlaceholder={user?.role !== 'ETUDIANT' ? "Rechercher par étudiant..." : undefined}
           searchKey={user?.role !== 'ETUDIANT' ? "etudiant" : undefined}

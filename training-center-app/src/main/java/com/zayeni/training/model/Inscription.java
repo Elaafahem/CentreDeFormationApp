@@ -1,19 +1,20 @@
 package com.zayeni.training.model;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import org.springframework.format.annotation.DateTimeFormat;
 import jakarta.validation.constraints.NotNull;
 import java.util.Collection;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.CascadeType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 public class Inscription implements Serializable {
@@ -23,8 +24,8 @@ public class Inscription implements Serializable {
     private Long id;
 
     @NotNull(message = "La date d'inscription est obligatoire")
-    @Temporal(TemporalType.DATE)
-    private Date dateInscription;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateInscription;
 
     @NotNull(message = "L'étudiant est obligatoire")
     @ManyToOne
@@ -36,14 +37,14 @@ public class Inscription implements Serializable {
 
     @OneToMany(mappedBy = "inscription", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private Collection<Note> notes;
+    private List<Note> notes = new ArrayList<>();
 
     @NotNull(message = "Le statut est obligatoire")
     private String status = "PENDING";
 
     public Inscription() {
         super();
-        this.dateInscription = new Date();
+        this.dateInscription = LocalDate.now();
         this.status = "PENDING";
     }
 
@@ -51,10 +52,10 @@ public class Inscription implements Serializable {
         super();
         this.etudiant = etudiant;
         this.cours = cours;
-        this.dateInscription = new Date();
+        this.dateInscription = LocalDate.now();
     }
 
-    public Inscription(Date dateInscription, Etudiant etudiant, Cours cours) {
+    public Inscription(LocalDate dateInscription, Etudiant etudiant, Cours cours) {
         super();
         this.dateInscription = dateInscription;
         this.etudiant = etudiant;
@@ -69,11 +70,11 @@ public class Inscription implements Serializable {
         this.id = id;
     }
 
-    public Date getDateInscription() {
+    public LocalDate getDateInscription() {
         return dateInscription;
     }
 
-    public void setDateInscription(Date dateInscription) {
+    public void setDateInscription(LocalDate dateInscription) {
         this.dateInscription = dateInscription;
     }
 
@@ -93,11 +94,11 @@ public class Inscription implements Serializable {
         this.cours = cours;
     }
 
-    public Collection<Note> getNotes() {
+    public List<Note> getNotes() {
         return notes;
     }
 
-    public void setNotes(Collection<Note> notes) {
+    public void setNotes(List<Note> notes) {
         this.notes = notes;
     }
 

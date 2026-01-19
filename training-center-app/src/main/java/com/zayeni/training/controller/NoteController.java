@@ -68,6 +68,73 @@ public class NoteController {
     @Autowired
     private com.zayeni.training.service.ReportService reportService;
 
+    @Autowired
+    private com.zayeni.training.service.GroupeService groupeService;
+
+    @Autowired
+    private com.zayeni.training.service.CoursService coursService;
+
+    @GetMapping("/manage")
+    public String manageGroupNotes(Model model,
+            @RequestParam(name = "groupeId", required = false) Long groupeId,
+            @RequestParam(name = "coursId", required = false) Long coursId) {
+
+        model.addAttribute("groupes", groupeService.findAll());
+        model.addAttribute("courses", coursService.findAll());
+        model.addAttribute("selectedGroupeId", groupeId);
+        model.addAttribute("selectedCoursId", coursId);
+
+        if (groupeId != null && coursId != null) {
+            List<Inscription> inscriptions = inscriptionService.findByEtudiant_Groupe_IdAndCours_Id(groupeId, coursId);
+            // We need to fetch the existing note for each inscription (if any).
+            // Since standard display doesn't easily map "Inscription -> Latest Note",
+            // we will let the view handle accessing `inscription.notes`.
+            // However, to make it easy to edit, we might want to pre-calculate a
+            // "currentNote" map.
+            // For now, we'll pass the list of inscriptions. The View can assume:
+            // if inscription.notes is not empty, take the last one.
+            model.addAttribute("inscriptions", inscriptions);
+        }
+
+        return "group-notes";
+    }
+
+    @PostMapping("/save-inline")
+    public String saveInline(
+            @RequestParam(name = "inscriptionId") Long inscriptionId,
+            @RequestParam(name = "valeur") double valeur,
+            @RequestParam(name = "appreciation", required = false) String appreciation,
+            @RequestParam(name = "groupeId") Long groupeId,
+            @RequestParam(name = "coursId") Long coursId) {
+
+        Inscription i = inscriptionService.findById(inscriptionId);
+        // Check if a note already exists for this inscription?
+        // The requirement is "modifier" (edit) or "ajouter" (add).
+        // If we want to EDIT the existing note, we need its ID.
+        // Simplest logic: If the student has notes, update the LAST one.
+        // If not, create a new one.
+
+        List<Note> existingNotes = noteService.findByInscription(i);
+        Note noteToSave;
+
+        if (!existingNotes.isEmpty()) {
+            // Edit the last one
+            noteToSave = existingNotes.get(existingNotes.size() - 1);
+            noteToSave.setValeur(valeur);
+            noteToSave.setAppreciation(appreciation);
+        } else {
+            // Create new
+            noteToSave = new Note();
+            noteToSave.setInscription(i);
+            noteToSave.setValeur(valeur);
+            noteToSave.setAppreciation(appreciation);
+        }
+
+        noteService.save(noteToSave);
+
+        return "redirect:/note/manage?groupeId=" + groupeId + "&coursId=" + coursId;
+    }
+
     @GetMapping("/report")
     public org.springframework.http.ResponseEntity<byte[]> downloadReport(
             @RequestParam(name = "inscriptionId") Long inscriptionId) {

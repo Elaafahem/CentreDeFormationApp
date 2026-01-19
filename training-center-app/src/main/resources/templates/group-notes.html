@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head(title='Gestion des Notes par Groupe')}"></head>
+
+<body>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav th:replace="~{fragments/layout :: sidebar}"></nav>
+
+        <!-- Page Content -->
+        <div id="content">
+            <!-- Top Navbar -->
+            <div th:replace="~{fragments/layout :: top-navbar}"></div>
+
+            <div class="main-container">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="fw-bold text-dark mb-0">Gestion des Notes par Groupe</h2>
+                </div>
+
+                <!-- Filter Card -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <form th:action="@{/note/manage}" method="get" class="row g-3 align-items-end">
+                            <div class="col-md-4">
+                                <label for="groupeId" class="form-label">Groupe</label>
+                                <select class="form-select" id="groupeId" name="groupeId" required>
+                                    <option value="" disabled selected>Choisir un groupe...</option>
+                                    <option th:each="g : ${groupes}" th:value="${g.id}" th:text="${g.nom}"
+                                        th:selected="${g.id == selectedGroupeId}"></option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="coursId" class="form-label">Cours</label>
+                                <select class="form-select" id="coursId" name="coursId" required>
+                                    <option value="" disabled selected>Choisir un cours...</option>
+                                    <option th:each="c : ${courses}" th:value="${c.id}" th:text="${c.titre}"
+                                        th:selected="${c.id == selectedCoursId}"></option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-filter me-2"></i>Filtrer
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Students Table -->
+                <div class="card" th:if="${inscriptions != null}">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="mb-0 text-dark fw-bold">Liste des étudiants</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th class="ps-4">Étudiant</th>
+                                        <th>Matricule</th>
+                                        <th>Note (sur 20)</th>
+                                        <th>Appréciation</th>
+                                        <th class="text-end pe-4">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="ins : ${inscriptions}">
+                                        <td class="ps-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar-initials bg-light text-primary me-3">
+                                                    <span
+                                                        th:text="${#strings.substring(ins.etudiant.prenom,0,1) + #strings.substring(ins.etudiant.nom,0,1)}">JD</span>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0 fw-bold"
+                                                        th:text="${ins.etudiant.prenom + ' ' + ins.etudiant.nom}">Jean
+                                                        Dupont</h6>
+                                                    <small class="text-muted"
+                                                        th:text="${ins.etudiant.email}">jean@example.com</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td th:text="${ins.etudiant.matricule}">MAT123</td>
+
+                                        <!-- Inline Form for each row -->
+                                        <form th:action="@{/note/save-inline}" method="post">
+                                            <input type="hidden" name="inscriptionId" th:value="${ins.id}" />
+                                            <input type="hidden" name="groupeId" th:value="${selectedGroupeId}" />
+                                            <input type="hidden" name="coursId" th:value="${selectedCoursId}" />
+
+                                            <td>
+                                                <!-- Logic to find the latest note value if exists -->
+                                                <input type="number" step="0.25" min="0" max="20" class="form-control"
+                                                    name="valeur" style="width: 100px;"
+                                                    th:value="${not #lists.isEmpty(ins.notes) ? ins.notes.get(ins.notes.size() - 1).valeur : ''}"
+                                                    required />
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control" name="appreciation"
+                                                    placeholder="Bien, Excel..."
+                                                    th:value="${not #lists.isEmpty(ins.notes) ? ins.notes.get(ins.notes.size() - 1).appreciation : ''}" />
+                                            </td>
+                                            <td class="text-end pe-4">
+                                                <button type="submit" class="btn btn-sm btn-success"
+                                                    title="Enregistrer">
+                                                    <i class="fas fa-save"></i>
+                                                </button>
+                                            </td>
+                                        </form>
+                                    </tr>
+                                    <!-- Empty State -->
+                                    <tr th:if="${#lists.isEmpty(inscriptions)}">
+                                        <td colspan="5" class="text-center py-5 text-muted">
+                                            <i class="fas fa-users-slash fa-3x mb-3 opacity-50"></i>
+                                            <p>Aucun étudiant trouvé pour ce groupe et ce cours.</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Initial Empty State -->
+                <div th:if="${inscriptions == null}" class="text-center py-5">
+                    <img src="https://cdni.iconscout.com/illustration/premium/thumb/searching-data-2963162-2485545.png"
+                        alt="Search" style="width: 200px; opacity: 0.8;" class="mb-3">
+                    <h5 class="text-muted">Sélectionnez un groupe et un cours pour gérer les notes.</h5>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+
+</html>

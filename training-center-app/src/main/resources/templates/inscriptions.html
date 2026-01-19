@@ -18,67 +18,162 @@
 
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
-                        <h2 class="fw-bold text-dark mb-1">Inscriptions</h2>
-                        <p class="text-muted mb-0">Gestion des enrôlements aux cours.</p>
+                        <h2 class="fw-bold text-dark mb-1">Inscriptions & Résultats</h2>
+                        <p class="text-muted mb-0">Consultez les parcours pédagogiques par étudiant.</p>
                     </div>
-                    <a th:href="@{/inscription/form}" class="btn btn-primary">
-                        <i class="fas fa-plus me-2"></i>Nouvelle Inscription
-                    </a>
+                    <div class="d-flex gap-2">
+                        <a th:href="@{/inscription/form}" class="btn btn-primary shadow-sm fw-bold">
+                            <i class="fas fa-plus me-2"></i>Nouvelle Inscription
+                        </a>
+                    </div>
                 </div>
 
-                <div class="card">
+                <!-- Feedback Messages -->
+                <div th:if="${successMessage}"
+                    class="alert alert-success alert-dismissible fade show shadow-sm border-0 mb-4" role="alert">
+                    <i class="fas fa-check-circle me-2"></i><span th:text="${successMessage}">Succès</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <div th:if="${errorMessage}"
+                    class="alert alert-danger alert-dismissible fade show shadow-sm border-0 mb-4" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i><span th:text="${errorMessage}">Erreur</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <!-- Popup Script for Error -->
+                <script th:if="${errorMessage}" th:inline="javascript">
+                    /*<![CDATA[*/
+                    window.addEventListener('DOMContentLoaded', (event) => {
+                        var msg = /*[[${errorMessage}]]*/ 'Erreur';
+                        alert(msg);
+                    });
+                    /*]]>*/
+                </script>
+
+                <div class="card border-0 shadow-sm overflow-hidden">
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <table class="table table-hover align-middle mb-0">
-                                <thead class="bg-light">
+                                <thead class="bg-light text-muted">
                                     <tr>
-                                        <th class="ps-4">Étudiant</th>
-                                        <th>Cours</th>
-                                        <th>Date d'inscription</th>
-                                        <th class="text-center">Suivi</th>
-                                        <th class="text-end pe-4">Actions</th>
+                                        <th class="ps-4 py-3" style="width: 50px;"></th>
+                                        <th class="py-3">Étudiant</th>
+                                        <th class="py-3">Matricule</th>
+                                        <th class="py-3">Cours Inscrits</th>
+                                        <th class="text-end pe-4 py-3">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:each="i : ${inscriptions}">
-                                        <td class="ps-4">
-                                            <div class="d-flex align-items-center">
-                                                <div class="avatar-initial rounded-circle bg-light text-primary me-3 fw-bold d-flex align-items-center justify-content-center"
-                                                    style="width:35px;height:35px;font-size:0.9rem;">
-                                                    <span th:text="${#strings.substring(i.etudiant.nom,0,1)}">N</span>
+                                    <th:block th:each="s : ${students}">
+                                        <tr class="student-row transition-all" style="cursor: pointer;"
+                                            th:attr="onclick=|toggleDetails('details-${s.id}')|">
+                                            <td class="ps-4 text-center">
+                                                <i class="fas fa-chevron-right text-muted transition-all detail-icon"
+                                                    th:id="'icon-' + ${s.id}"></i>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="me-3">
+                                                        <div class="rounded-circle bg-primary-soft d-flex align-items-center justify-content-center fw-bold shadow-sm"
+                                                            style="width: 40px; height: 40px; color: #2563eb;">
+                                                            <span th:text="${#strings.substring(s.nom,0,1)}">N</span>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="mb-0 fw-bold text-dark"
+                                                            th:text="${s.nom} + ' ' + ${s.prenom}">Nom Prénom</h6>
+                                                        <small class="text-muted"
+                                                            th:text="${s.email}">email@example.com</small>
+                                                    </div>
                                                 </div>
-                                                <span class="fw-medium"
-                                                    th:text="${i.etudiant.nom} + ' ' + ${i.etudiant.prenom}">Nom
-                                                    Prénom</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="fw-semibold text-dark" th:text="${i.cours.titre}">Cours</span>
-                                        </td>
-                                        <td class="text-muted">
-                                            <i class="far fa-calendar-alt me-1"></i>
-                                            <span
-                                                th:text="${#dates.format(i.dateInscription, 'dd/MM/yyyy')}">01/01/2024</span>
-                                        </td>
-                                        <td class="text-center">
-                                            <a th:href="@{/note/index(inscriptionId=${i.id})}"
-                                                class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                                                <i class="fas fa-graduation-cap me-1"></i>Notes
-                                            </a>
-                                        </td>
-                                        <td class="text-end pe-4">
-                                            <a th:href="@{/inscription/delete(id=${i.id})}" class="action-btn delete"
-                                                onclick="return confirm('Êtes-vous sûr de vouloir annuler cette inscription ? Cette action supprimera également les notes !')"
-                                                title="Supprimer">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-light text-dark border px-3 rounded-pill"
+                                                    th:text="${s.matricule}">ETU-001</span>
+                                            </td>
+                                            <td>
+                                                <span class="fw-bold text-primary"
+                                                    th:text="${#lists.size(s.inscriptions)}">0</span> modules
+                                            </td>
+                                            <td class="text-end pe-4">
+                                                <div class="d-flex justify-content-end gap-2">
+                                                    <a th:href="@{/inscription/transcript(studentId=${s.id})}"
+                                                        class="btn btn-sm btn-outline-success border-0 rounded-circle"
+                                                        style="width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center;"
+                                                        title="Télécharger Relevé Global">
+                                                        <i class="fas fa-file-pdf"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <!-- Details Row -->
+                                        <tr th:id="'details-' + ${s.id}" class="detail-row d-none">
+                                            <td colspan="5" class="bg-light p-4">
+                                                <div class="card border-0 shadow-sm mx-4">
+                                                    <div class="card-body p-0">
+                                                        <table class="table table-sm table-borderless mb-0">
+                                                            <thead class="bg-white text-muted border-bottom">
+                                                                <tr>
+                                                                    <th class="ps-4 py-2">Module de formation</th>
+                                                                    <th class="py-2">Date Inscription</th>
+                                                                    <th class="py-2">Dernière Note</th>
+                                                                    <th class="text-end pe-4 py-2">Action</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr th:each="i : ${s.inscriptions}"
+                                                                    class="border-bottom">
+                                                                    <td class="ps-4 py-2 fw-semibold"
+                                                                        th:text="${i.cours != null ? i.cours.titre : 'Sans titre'}">
+                                                                        Cours Title</td>
+                                                                    <td class="py-2 text-muted"
+                                                                        th:text="${#temporals.format(i.dateInscription, 'dd/MM/yyyy')}">
+                                                                        Date</td>
+                                                                    <td class="py-2">
+                                                                        <span th:if="${not #lists.isEmpty(i.notes)}"
+                                                                            class="badge bg-primary rounded-pill px-3"
+                                                                            th:text="${i.notes.get(0).valeur} + ' / 20'">15
+                                                                            /
+                                                                            20</span>
+                                                                        <span th:if="${#lists.isEmpty(i.notes)}"
+                                                                            class="text-muted small italic">Pas de
+                                                                            note</span>
+                                                                    </td>
+                                                                    <td class="text-end pe-4 py-2">
+                                                                        <a th:href="@{/note/index(inscriptionId=${i.id})}"
+                                                                            class="btn btn-xs btn-link text-primary p-0 me-2"
+                                                                            title="Gérer les notes">
+                                                                            <i class="fas fa-clipboard-list"></i> Notes
+                                                                        </a>
+                                                                        <a th:href="@{/inscription/delete(id=${i.id})}"
+                                                                            class="btn btn-xs btn-link text-danger p-0"
+                                                                            onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette inscription ? Cela supprimera également toutes les notes associées.')"
+                                                                            title="Supprimer l'inscription">
+                                                                            <i class="fas fa-trash-alt"></i>
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </th:block>
+
                                     <!-- Empty State -->
-                                    <tr th:if="${#lists.isEmpty(inscriptions)}">
-                                        <td colspan="5" class="text-center py-5 text-muted">
-                                            <i class="fas fa-clipboard-list fa-3x mb-3 opacity-50"></i>
-                                            <p>Aucune inscription enregistrée.</p>
+                                    <tr th:if="${#lists.isEmpty(students)}">
+                                        <td colspan="5" class="text-center py-5">
+                                            <div class="py-4">
+                                                <i class="fas fa-user-graduate fa-4x text-light mb-4"></i>
+                                                <h5 class="text-muted fw-bold">Aucun étudiant inscrit</h5>
+                                                <p class="text-muted mx-auto" style="max-width: 300px;">Commençez par
+                                                    inscrire des étudiants à des modules de formation.</p>
+                                                <a th:href="@{/inscription/form}"
+                                                    class="btn btn-primary mt-2 shadow-sm fw-bold">
+                                                    <i class="fas fa-plus me-2"></i>Inscrire un étudiant
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -92,6 +187,57 @@
     </div>
 
     <div th:replace="~{fragments/layout :: scripts}"></div>
+
+    <script th:inline="javascript">
+        function toggleDetails(id) {
+            const row = document.getElementById(id);
+            const studentId = id.replace('details-', '');
+            const icon = document.getElementById('icon-' + studentId);
+
+            if (row.classList.contains('d-none')) {
+                // Close all other detail rows first (optional, but cleaner)
+                // document.querySelectorAll('.detail-row').forEach(r => r.classList.add('d-none'));
+                // document.querySelectorAll('.detail-icon').forEach(i => i.style.transform = 'rotate(0deg)');
+
+                row.classList.remove('d-none');
+                icon.style.transform = 'rotate(90deg)';
+                icon.classList.remove('text-muted');
+                icon.classList.add('text-primary');
+            } else {
+                row.classList.add('d-none');
+                icon.style.transform = 'rotate(0deg)';
+                icon.classList.add('text-muted');
+                icon.classList.remove('text-primary');
+            }
+        }
+    </script>
+
+    <style>
+        .bg-primary-soft {
+            background-color: rgba(37, 99, 235, 0.1);
+        }
+
+        .transition-all {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .student-row:hover {
+            background-color: rgba(37, 99, 235, 0.05) !important;
+        }
+
+        .detail-icon {
+            transition: transform 0.2s;
+        }
+
+        .btn-xs {
+            padding: 0.1rem 0.4rem;
+            font-size: 0.75rem;
+        }
+
+        .italic {
+            font-style: italic;
+        }
+    </style>
 </body>
 
 </html>

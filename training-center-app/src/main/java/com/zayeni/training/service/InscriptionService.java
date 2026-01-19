@@ -25,6 +25,13 @@ public class InscriptionService {
 
     @SuppressWarnings("null")
     public Inscription save(Inscription inscription) {
+        if (inscription.getEtudiant() != null && inscription.getCours() != null) {
+            Inscription existing = inscriptionRepository.findByEtudiantAndCours(
+                    inscription.getEtudiant(), inscription.getCours());
+            if (existing != null && (inscription.getId() == null || !existing.getId().equals(inscription.getId()))) {
+                throw new RuntimeException("Cet étudiant est déjà inscrit à ce cours.");
+            }
+        }
         Inscription saved = inscriptionRepository.save(inscription);
 
         // Notify student
@@ -45,5 +52,9 @@ public class InscriptionService {
     @SuppressWarnings("null")
     public void deleteById(Long id) {
         inscriptionRepository.deleteById(id);
+    }
+
+    public List<Inscription> findByEtudiant_Groupe_IdAndCours_Id(Long groupeId, Long coursId) {
+        return inscriptionRepository.findByEtudiant_Groupe_IdAndCours_Id(groupeId, coursId);
     }
 }

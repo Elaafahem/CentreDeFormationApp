@@ -24,6 +24,18 @@ export default function Login() {
             const success = await login(username, password);
             if (success) {
                 toast.success("Connexion réussie !");
+
+                // Get user from localStorage to check role (as login returns boolean)
+                const savedUser = localStorage.getItem('eduflow_user');
+                if (savedUser) {
+                    const user = JSON.parse(savedUser);
+                    if (user.role === 'ADMIN') {
+                        // Redirect admins to Thymeleaf dashboard
+                        window.location.href = "http://localhost:8080/dashboard";
+                        return;
+                    }
+                }
+
                 navigate("/");
             } else {
                 setError("Identifiants incorrects");
@@ -127,20 +139,7 @@ export default function Login() {
                         <p className="text-xs text-slate-500 text-center mb-3">
                             Comptes de démonstration
                         </p>
-                        <div className="grid grid-cols-3 gap-2 text-xs">
-                            <div className="p-2 rounded-lg bg-slate-50 text-center">
-                                <span className="block font-medium text-slate-700">Admin</span>
-                                <span className="text-slate-500">admin / admin123</span>
-                            </div>
-                            <div className="p-2 rounded-lg bg-slate-50 text-center">
-                                <span className="block font-medium text-slate-700">Formateur</span>
-                                <span className="text-slate-500">formateur / formateur123</span>
-                            </div>
-                            <div className="p-2 rounded-lg bg-slate-50 text-center">
-                                <span className="block font-medium text-slate-700">Étudiant</span>
-                                <span className="text-slate-500">etudiant / etudiant123</span>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
 

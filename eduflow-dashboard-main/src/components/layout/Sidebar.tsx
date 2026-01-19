@@ -65,15 +65,10 @@ interface NavItemConfig {
 
 const allNavItems: NavItemConfig[] = [
   { to: "/", icon: LayoutDashboard, label: "Tableau de bord" },
-  { to: "/students", icon: Users, label: "Étudiants", roles: ["ADMIN"] },
-  { to: "/trainers", icon: GraduationCap, label: "Formateurs", roles: ["ADMIN"] },
-  { to: "/specialties", icon: Layers, label: "Spécialités", roles: ["ADMIN"] },
-  { to: "/sessions", icon: History, label: "Sessions", roles: ["ADMIN"] },
-  { to: "/groups", icon: LayoutGrid, label: "Groupes", roles: ["ADMIN"] },
-  { to: "/courses", icon: BookOpen, label: "Cours", roles: ["ADMIN", "FORMATEUR", "ETUDIANT"] },
-  { to: "/enrollments", icon: ClipboardList, label: "Inscriptions", roles: ["ADMIN", "FORMATEUR"] },
-  { to: "/grades", icon: FileText, label: "Notes", roles: ["ADMIN", "FORMATEUR", "ETUDIANT"] },
-  { to: "/schedule", icon: Calendar, label: "Emploi du temps", roles: ["ADMIN", "FORMATEUR", "ETUDIANT"] },
+  { to: "/courses", icon: BookOpen, label: "Cours", roles: ["FORMATEUR", "ETUDIANT"] },
+  { to: "/enrollments", icon: ClipboardList, label: "Inscriptions", roles: ["FORMATEUR"] },
+  { to: "/grades", icon: FileText, label: "Notes", roles: ["FORMATEUR", "ETUDIANT"] },
+  { to: "/schedule", icon: Calendar, label: "Emploi du temps", roles: ["FORMATEUR", "ETUDIANT"] },
 ];
 
 interface SidebarProps {

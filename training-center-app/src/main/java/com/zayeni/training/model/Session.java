@@ -1,13 +1,12 @@
 package com.zayeni.training.model;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Session implements Serializable {
@@ -18,20 +17,21 @@ public class Session implements Serializable {
 
     private String nom; // ex: "Année 2025-2026", "Semestre 2"
 
-    @Temporal(TemporalType.DATE)
-    private Date dateDebut;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateDebut;
 
-    @Temporal(TemporalType.DATE)
-    private Date dateFin;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateFin;
 
-    // Could be linked to Courses or Groups, but requirement is just "Gérer les
-    // sessions"
+    private boolean active = true;
+
+    // Linked to Groups for statistics
 
     public Session() {
         super();
     }
 
-    public Session(String nom, Date dateDebut, Date dateFin) {
+    public Session(String nom, LocalDate dateDebut, LocalDate dateFin) {
         super();
         this.nom = nom;
         this.dateDebut = dateDebut;
@@ -54,19 +54,27 @@ public class Session implements Serializable {
         this.nom = nom;
     }
 
-    public Date getDateDebut() {
+    public LocalDate getDateDebut() {
         return dateDebut;
     }
 
-    public void setDateDebut(Date dateDebut) {
+    public void setDateDebut(LocalDate dateDebut) {
         this.dateDebut = dateDebut;
     }
 
-    public Date getDateFin() {
+    public LocalDate getDateFin() {
         return dateFin;
     }
 
-    public void setDateFin(Date dateFin) {
+    public void setDateFin(LocalDate dateFin) {
         this.dateFin = dateFin;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

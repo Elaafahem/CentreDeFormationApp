@@ -385,15 +385,7 @@ export default function Courses() {
                         <BookOpen className="h-4 w-4 mr-2" />
                         Supports de cours
                       </DropdownMenuItem>
-                      {user?.role === 'ETUDIANT' && (
-                        <DropdownMenuItem onClick={() => {
-                          setSelectedCourse(course);
-                          setIsEnrollDialogOpen(true);
-                        }}>
-                          <Plus className="h-4 w-4 mr-2" />
-                          S'inscrire
-                        </DropdownMenuItem>
-                      )}
+
                       {user?.role === 'ADMIN' && (
                         <DropdownMenuItem onClick={() => handleOpenEdit(course)}>
                           <Pencil className="h-4 w-4 mr-2" />

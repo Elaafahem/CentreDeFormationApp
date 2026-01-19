@@ -21,10 +21,17 @@ import com.zayeni.training.service.GroupeService;
 public class GroupeRestController {
 
     @Autowired
+    private com.zayeni.training.repository.GroupeRepository groupeRepo;
+
+    @Autowired
     private GroupeService groupeService;
 
     @GetMapping
-    public List<Groupe> getAll() {
+    public List<Groupe> getAll(
+            @org.springframework.web.bind.annotation.RequestParam(required = false) String formateurEmail) {
+        if (formateurEmail != null && !formateurEmail.isEmpty()) {
+            return groupeRepo.findDistinctByCours_Formateur_Email(formateurEmail);
+        }
         return groupeService.findAll();
     }
 

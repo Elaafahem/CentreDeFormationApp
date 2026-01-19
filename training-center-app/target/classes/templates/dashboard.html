@@ -16,46 +16,331 @@
 
             <div class="main-container">
 
+                <!-- Page Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold text-dark mb-1">
+                            <i class="fas fa-chart-line text-primary me-2"></i>
+                            Tableau de Bord
+                        </h2>
+                        <p class="text-muted mb-0">Vue d'ensemble des performances et statistiques</p>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="card mb-4 border-0 shadow-sm">
+                    <div class="card-body">
+                        <form method="get" action="/dashboard" class="row g-3">
+                            <div class="col-md-5">
+                                <label class="form-label text-muted fw-semibold">
+                                    <i class="fas fa-book me-1"></i> Filtrer par Cours
+                                </label>
+                                <select name="coursId" class="form-select" onchange="this.form.submit()">
+                                    <option value="">Tous les cours</option>
+                                    <option th:each="c : ${allCourses}" th:value="${c.id}" th:text="${c.titre}"
+                                        th:selected="${selectedCoursId != null && selectedCoursId == c.id}">
+                                        Cours
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="form-label text-muted fw-semibold">
+                                    <i class="fas fa-chalkboard-teacher me-1"></i> Filtrer par Formateur
+                                </label>
+                                <select name="formateurId" class="form-select" onchange="this.form.submit()">
+                                    <option value="">Tous les formateurs</option>
+                                    <option th:each="f : ${allFormateurs}" th:value="${f.id}" th:text="${f.nom}"
+                                        th:selected="${selectedFormateurId != null && selectedFormateurId == f.id}">
+                                        Formateur
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <a href="/dashboard" class="btn btn-outline-secondary w-100">
+                                    <i class="fas fa-redo me-1"></i> Réinitialiser
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
                 <!-- KPI Cards -->
-                <div class="row mb-5">
-                    <div class="col-md-4">
-                        <div class="card p-4 border-0 shadow-sm"
-                            style="border-left: 5px solid var(--primary-color) !important;">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="text-muted text-uppercase fw-bold mb-2">Total Étudiants</h6>
-                                    <h2 class="fw-bold text-dark mb-0" th:text="${counts['etudiants']}">0</h2>
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <p class="text-muted text-uppercase fw-semibold mb-2"
+                                            style="font-size: 0.75rem;">
+                                            Total Étudiants
+                                        </p>
+                                        <h2 class="fw-bold mb-0" th:text="${stats['totalStudents']}">0</h2>
+                                    </div>
+                                    <div class="rounded-circle p-3" style="background-color: #dbeafe;">
+                                        <i class="fas fa-user-graduate fa-lg" style="color: #2563eb;"></i>
+                                    </div>
                                 </div>
-                                <div class="icon-shape bg-light text-primary rounded-circle p-3">
-                                    <i class="fas fa-user-graduate fa-2x"></i>
+                            </div>
+                            <div class="card-footer bg-transparent border-0 pt-0">
+                                <small class="text-muted">
+                                    <i class="fas fa-arrow-up text-success me-1"></i>
+                                    Actifs
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <p class="text-muted text-uppercase fw-semibold mb-2"
+                                            style="font-size: 0.75rem;">
+                                            Formateurs
+                                        </p>
+                                        <h2 class="fw-bold mb-0" th:text="${stats['totalTrainers']}">0</h2>
+                                    </div>
+                                    <div class="rounded-circle p-3" style="background-color: #fef3c7;">
+                                        <i class="fas fa-chalkboard-teacher fa-lg" style="color: #f59e0b;"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent border-0 pt-0">
+                                <small class="text-muted">
+                                    <i class="fas fa-check-circle text-success me-1"></i>
+                                    Disponibles
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <p class="text-muted text-uppercase fw-semibold mb-2"
+                                            style="font-size: 0.75rem;">
+                                            Cours Actifs
+                                        </p>
+                                        <h2 class="fw-bold mb-0" th:text="${stats['totalCourses']}">0</h2>
+                                    </div>
+                                    <div class="rounded-circle p-3" style="background-color: #dcfce7;">
+                                        <i class="fas fa-book-open fa-lg" style="color: #16a34a;"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent border-0 pt-0">
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar-check text-success me-1"></i>
+                                    En cours
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <p class="text-muted text-uppercase fw-semibold mb-2"
+                                            style="font-size: 0.75rem;">
+                                            Taux de Réussite
+                                        </p>
+                                        <h2 class="fw-bold mb-0">
+                                            <span th:text="${stats['successRate']}">0</span>%
+                                        </h2>
+                                    </div>
+                                    <div class="rounded-circle p-3" style="background-color: #e0f2fe;">
+                                        <i class="fas fa-chart-line fa-lg" style="color: #0284c7;"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent border-0 pt-0">
+                                <small class="text-muted">
+                                    <i class="fas fa-trophy text-warning me-1"></i>
+                                    Performance globale
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row 1 -->
+                <div class="row mb-4">
+                    <div class="col-lg-8">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-white border-0 pt-4 px-4">
+                                <h5 class="fw-bold mb-0">
+                                    <i class="fas fa-chart-area text-primary me-2"></i>
+                                    Inscriptions par Mois
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="enrollmentChart" height="80"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-white border-0 pt-4 px-4">
+                                <h5 class="fw-bold mb-0">
+                                    <i class="fas fa-chart-pie text-success me-2"></i>
+                                    Distribution des Cours
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="distributionChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row 2 -->
+                <div class="row mb-4">
+                    <div class="col-lg-6">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-white border-0 pt-4 px-4">
+                                <h5 class="fw-bold mb-0">
+                                    <i class="fas fa-chart-bar text-warning me-2"></i>
+                                    Distribution des Performances
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="performanceChart" height="100"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
+                                <h5 class="fw-bold mb-3">
+                                    <i class="fas fa-trophy text-warning me-2"></i>
+                                    Top Performers
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group list-group-flush">
+                                    <div th:each="performer, iterStat : ${topPerformers}"
+                                        class="list-group-item border-0 px-0">
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-3">
+                                                <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold"
+                                                    style="width: 40px; height: 40px; background-color: #dbeafe; color: #2563eb;">
+                                                    <span th:text="${iterStat.count}">1</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-0 fw-semibold" th:text="${performer.name}">Nom Étudiant
+                                                </h6>
+                                                <small class="text-muted">
+                                                    <span th:text="${performer.coursesCount}">0</span> cours
+                                                </small>
+                                            </div>
+                                            <div>
+                                                <span class="badge bg-success"
+                                                    th:text="${#numbers.formatDecimal(performer.average, 1, 2)}">
+                                                    15.50
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div th:if="${#lists.isEmpty(topPerformers)}" class="text-center py-4 text-muted">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Aucune donnée disponible
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card p-4 border-0 shadow-sm"
-                            style="border-left: 5px solid var(--success-color) !important;">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="text-muted text-uppercase fw-bold mb-2">Cours Actifs</h6>
-                                    <h2 class="fw-bold text-dark mb-0" th:text="${counts['cours']}">0</h2>
-                                </div>
-                                <div class="icon-shape bg-light text-success rounded-circle p-3">
-                                    <i class="fas fa-book-open fa-2x"></i>
+                </div>
+
+                <!-- Activities and Sessions -->
+                <div class="row mb-4">
+                    <div class="col-lg-6">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
+                                <h5 class="fw-bold mb-3">
+                                    <i class="fas fa-bell text-info me-2"></i>
+                                    Activités Récentes
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group list-group-flush">
+                                    <div th:each="activity : ${recentActivities}" class="list-group-item border-0 px-0">
+                                        <div class="d-flex">
+                                            <div class="me-3">
+                                                <div class="rounded-circle d-flex align-items-center justify-content-center"
+                                                    style="width: 35px; height: 35px;"
+                                                    th:classappend="${activity.type == 'enrollment'} ? 'bg-primary-soft' : 'bg-success-soft'">
+                                                    <i
+                                                        th:class="${activity.type == 'enrollment'} ? 'fas fa-user-plus text-primary' : 'fas fa-star text-success'"></i>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1 fw-semibold" th:text="${activity.title}">Titre</h6>
+                                                <p class="mb-0 text-muted small" th:text="${activity.description}">
+                                                    Description</p>
+                                                <small class="text-muted" th:text="${activity.time}">Il y a 2h</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div th:if="${#lists.isEmpty(recentActivities)}"
+                                        class="text-center py-4 text-muted">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Aucune activité récente
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card p-4 border-0 shadow-sm"
-                            style="border-left: 5px solid var(--warning-color) !important;">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="text-muted text-uppercase fw-bold mb-2">Formateurs</h6>
-                                    <h2 class="fw-bold text-dark mb-0" th:text="${counts['formateurs']}">0</h2>
-                                </div>
-                                <div class="icon-shape bg-light text-warning rounded-circle p-3">
-                                    <i class="fas fa-chalkboard-teacher fa-2x"></i>
+
+                    <div class="col-lg-6">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
+                                <h5 class="fw-bold mb-3">
+                                    <i class="fas fa-calendar-day text-danger me-2"></i>
+                                    Sessions d'Aujourd'hui
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group list-group-flush">
+                                    <div th:each="seance : ${upcomingSessions}" class="list-group-item border-0 px-0">
+                                        <div class="d-flex align-items-start">
+                                            <div class="me-3">
+                                                <div class="rounded p-2 bg-danger-soft">
+                                                    <i class="fas fa-clock text-danger"></i>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1 fw-semibold" th:text="${seance.title}">Cours</h6>
+                                                <p class="mb-1 text-muted small">
+                                                    <i class="fas fa-user me-1"></i>
+                                                    <span th:text="${seance.trainer}">Formateur</span>
+                                                </p>
+                                                <p class="mb-0 text-muted small">
+                                                    <i class="fas fa-clock me-1"></i>
+                                                    <span th:text="${seance.time}">09:00 - 11:00</span>
+                                                    <span class="mx-2">|</span>
+                                                    <i class="fas fa-door-open me-1"></i>
+                                                    <span th:text="${seance.room}">Salle A</span>
+                                                </p>
+                                            </div>
+                                            <span class="badge bg-success" th:text="${seance.students} + ' étudiants'">
+                                                25 étudiants
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div th:if="${#lists.isEmpty(upcomingSessions)}"
+                                        class="text-center py-4 text-muted">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Aucune session aujourd'hui
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -63,48 +348,52 @@
                 </div>
 
                 <!-- Course Stats Table -->
-                <div class="card">
-                    <div
-                        class="card-header d-flex justify-content-between align-items-center bg-white border-0 pt-4 px-4 pb-0">
-                        <h3 class="fw-bold"><i class="fas fa-chart-bar me-2"></i>Performances des Cours</h3>
-                        <button class="btn btn-sm btn-outline-primary"><i
-                                class="fas fa-download me-1"></i>Exporter</button>
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white border-0 pt-4 px-4 pb-0">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold mb-0">
+                                <i class="fas fa-table text-primary me-2"></i>
+                                Performances des Cours
+                            </h5>
+                            <button class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-download me-1"></i>Exporter
+                            </button>
+                        </div>
                     </div>
-                    <div class="card-body p-4">
+                    <div class="card-body p-0">
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle">
+                            <table class="table table-hover align-middle mb-0">
                                 <thead class="bg-light">
                                     <tr>
-                                        <th>Titre du Cours</th>
+                                        <th class="ps-4">Titre du Cours</th>
                                         <th class="text-center">Inscrits</th>
                                         <th class="text-center">Moyenne</th>
                                         <th class="text-center">Taux de Réussite</th>
-                                        <th class="text-end">Statut</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr th:each="stat : ${courseStats}">
-                                        <td>
+                                        <td class="ps-4">
                                             <div class="d-flex align-items-center">
-                                                <div class="avatar-initial rounded bg-primary text-white me-3 fw-bold p-2 d-flex align-items-center justify-content-center"
+                                                <div class="rounded bg-primary text-white me-3 fw-bold p-2 d-flex align-items-center justify-content-center"
                                                     style="width:40px;height:40px;opacity:0.8;">
                                                     <span th:text="${#strings.substring(stat.titre,0,1)}">C</span>
                                                 </div>
-                                                <span class="fw-semibold text-dark" th:text="${stat.titre}">Maths</span>
+                                                <span class="fw-semibold text-dark" th:text="${stat.titre}">Cours</span>
                                             </div>
                                         </td>
-                                        <td class="text-center fw-bold text-secondary" th:text="${stat.inscrits}">25
-                                        </td>
+                                        <td class="text-center fw-bold text-secondary" th:text="${stat.inscrits}">0</td>
                                         <td class="text-center">
                                             <span class="badge"
-                                                th:classappend="${stat.moyenne >= 10 ? 'bg-success-soft' : 'bg-danger-soft'}"
-                                                th:text="${stat.moyenne} + ' / 20'">
+                                                th:classappend="${stat.moyenne >= 10 ? 'bg-success' : 'bg-danger'}"
+                                                th:text="${#numbers.formatDecimal(stat.moyenne, 1, 2)} + ' / 20'">
+                                                0 / 20
                                             </span>
                                         </td>
                                         <td class="text-center">
                                             <div class="d-flex align-items-center justify-content-center">
                                                 <span class="me-2 text-muted small"
-                                                    th:text="${stat.tauxReussite} + '%'">75%</span>
+                                                    th:text="${#numbers.formatDecimal(stat.tauxReussite, 1, 0)} + '%'">0%</span>
                                                 <div class="progress flex-grow-1"
                                                     style="height: 6px; max-width: 100px;">
                                                     <div class="progress-bar rounded" role="progressbar"
@@ -114,9 +403,11 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="text-end">
-                                            <button class="btn btn-sm btn-light text-muted"><i
-                                                    class="fas fa-ellipsis-v"></i></button>
+                                    </tr>
+                                    <tr th:if="${#lists.isEmpty(courseStats)}">
+                                        <td colspan="4" class="text-center py-4 text-muted">
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            Aucun cours disponible
                                         </td>
                                     </tr>
                                 </tbody>
@@ -130,6 +421,115 @@
     </div>
 
     <div th:replace="~{fragments/layout :: scripts}"></div>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        // Enrollment Chart Data
+        const enrollmentData = /*[[${enrollmentData}]]*/[];
+        const enrollmentLabels = enrollmentData.map(d => d.month);
+        const enrollmentValues = enrollmentData.map(d => d.inscriptions);
+
+        // Distribution Chart Data
+        const distributionData = /*[[${distributionData}]]*/[];
+        const distributionLabels = distributionData.map(d => d.name);
+        const distributionValues = distributionData.map(d => d.value);
+
+        // Performance Chart Data
+        const performanceData = /*[[${performanceData}]]*/[];
+        const performanceLabels = performanceData.map(d => d.range);
+        const performanceValues = performanceData.map(d => d.count);
+
+        // Enrollment Chart
+        new Chart(document.getElementById('enrollmentChart'), {
+            type: 'line',
+            data: {
+                labels: enrollmentLabels,
+                datasets: [{
+                    label: 'Inscriptions',
+                    data: enrollmentValues,
+                    borderColor: '#2563eb',
+                    backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Distribution Chart
+        if (distributionData.length > 0) {
+            new Chart(document.getElementById('distributionChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: distributionLabels,
+                    datasets: [{
+                        data: distributionValues,
+                        backgroundColor: [
+                            '#2563eb', '#16a34a', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        // Performance Chart
+        new Chart(document.getElementById('performanceChart'), {
+            type: 'bar',
+            data: {
+                labels: performanceLabels,
+                datasets: [{
+                    label: 'Nombre d\'étudiants',
+                    data: performanceValues,
+                    backgroundColor: '#f59e0b',
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+        /*]]>*/
+    </script>
+
+    <style>
+        .bg-primary-soft {
+            background-color: #dbeafe;
+        }
+
+        .bg-success-soft {
+            background-color: #dcfce7;
+        }
+
+        .bg-danger-soft {
+            background-color: #fee2e2;
+        }
+    </style>
 </body>
 
 </html>

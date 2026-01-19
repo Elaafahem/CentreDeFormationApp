@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -20,6 +21,9 @@ public class Groupe implements Serializable {
     private String nom; // ex: "TP1"
     private String niveau; // ex: "1ere Année", "Semestre 1"
     private String specialite; // ex: "Informatique"
+
+    @ManyToOne
+    private Session session;
 
     @OneToMany(mappedBy = "groupe")
     @JsonIgnore
@@ -86,5 +90,13 @@ public class Groupe implements Serializable {
 
     public void setCours(Collection<Cours> cours) {
         this.cours = cours;
+    }
+
+    public Session getSession() {
+        return session;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
     }
 }

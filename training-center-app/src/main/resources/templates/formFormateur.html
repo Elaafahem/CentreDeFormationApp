@@ -17,51 +17,77 @@
             <div class="main-container">
 
                 <div class="row justify-content-center">
-                    <div class="col-md-8 col-lg-6">
-                        <div class="card shadow-md border-0">
-                            <div class="card-header bg-white pt-4 pb-0 border-0">
-                                <h4 class="mb-0"><i class="fas fa-edit me-2 text-primary"></i>Saisie Formateur</h4>
-                            </div>
-                            <div class="card-body p-4">
-                                <form th:action="@{/formateur/save}" method="post" th:object="${formateur}">
-                                    <input type="hidden" th:field="*{id}" />
-
-                                    <div class="mb-3">
-                                        <label class="form-label">Nom Complet</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-light border-end-0"><i
-                                                    class="fas fa-user-tie text-muted"></i></span>
-                                            <input type="text" class="form-control border-start-0" th:field="*{nom}"
-                                                required minlength="2" placeholder="Ex: Jean Dupont" />
+                    <div class="col-md-10 col-lg-8">
+                        <div class="card border-0 shadow-sm overflow-hidden">
+                            <div class="row g-0">
+                                <div
+                                    class="col-md-4 bg-warning d-none d-md-flex align-items-center justify-content-center text-dark p-4">
+                                    <div class="text-center">
+                                        <i class="fas fa-chalkboard-teacher fa-5x mb-4 opacity-75"></i>
+                                        <h3 class="fw-bold">Fiche Formateur</h3>
+                                        <p class="small opacity-75">Gérez les experts et leur domaine d'expertise.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body p-4 p-lg-5">
+                                        <div class="d-flex align-items-center mb-4">
+                                            <div class="rounded-circle bg-warning-soft p-3 me-3">
+                                                <i class="fas fa-user-tie text-warning"></i>
+                                            </div>
+                                            <h4 class="mb-0 fw-bold text-dark">Détails de l'Expert</h4>
                                         </div>
-                                    </div>
 
-                                    <div class="mb-3">
-                                        <label class="form-label">Spécialité</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-light border-end-0"><i
-                                                    class="fas fa-laptop-code text-muted"></i></span>
-                                            <input type="text" class="form-control border-start-0"
-                                                th:field="*{specialite}" required
-                                                placeholder="Ex: Spring Boot, Angular..." />
-                                        </div>
-                                    </div>
+                                        <form th:action="@{/formateur/save}" method="post" th:object="${formateur}">
+                                            <input type="hidden" th:field="*{id}" />
 
-                                    <div class="mb-4">
-                                        <label class="form-label">Email Professionnel</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-light border-end-0"><i
-                                                    class="fas fa-envelope text-muted"></i></span>
-                                            <input type="email" class="form-control border-start-0" th:field="*{email}"
-                                                required placeholder="jean.dupont@zayeni.com" />
-                                        </div>
-                                    </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Nom Complet</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light"><i
+                                                            class="fas fa-user text-muted"></i></span>
+                                                    <input type="text" class="form-control" th:field="*{nom}" required
+                                                        minlength="2" placeholder="Ex: Dr. Ahmed Ben Ali" />
+                                                </div>
+                                            </div>
 
-                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                        <a th:href="@{/formateur/index}" class="btn btn-light me-md-2">Annuler</a>
-                                        <button type="submit" class="btn btn-primary px-4">Enregistrer</button>
+                                            <div class="mb-3">
+                                                <label class="form-label">Spécialité Principale</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light"><i
+                                                            class="fas fa-star text-muted"></i></span>
+                                                    <input type="text" class="form-control" th:field="*{specialite}"
+                                                        required
+                                                        placeholder="Ex: Intelligence Artificielle, Cloud..." />
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-4">
+                                                <label class="form-label">Email Professionnel</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light"><i
+                                                            class="fas fa-envelope text-muted"></i></span>
+                                                    <input type="email" class="form-control" th:field="*{email}"
+                                                        required placeholder="expert@zayeni.com" />
+                                                </div>
+                                            </div>
+
+                                            <hr class="my-4 opacity-50">
+
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <a th:href="@{/formateur/index}"
+                                                    class="text-muted text-decoration-none small">
+                                                    <i class="fas fa-arrow-left me-1"></i>Retour
+                                                </a>
+                                                <div class="d-flex gap-2">
+                                                    <a th:href="@{/formateur/index}"
+                                                        class="btn btn-light px-4">Annuler</a>
+                                                    <button type="submit"
+                                                        class="btn btn-warning px-5 shadow-sm fw-bold">Sauvegarder</button>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -70,6 +96,12 @@
             </div>
         </div>
     </div>
+
+    <style>
+        .bg-warning-soft {
+            background-color: rgba(245, 158, 11, 0.1);
+        }
+    </style>
 
     <div th:replace="~{fragments/layout :: scripts}"></div>
 </body>
