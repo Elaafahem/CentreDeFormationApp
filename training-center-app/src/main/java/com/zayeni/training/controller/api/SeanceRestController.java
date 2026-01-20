@@ -15,28 +15,44 @@ public class SeanceRestController {
     @Autowired
     private SeanceService seanceService;
 
-    @Autowired
-    private com.zayeni.training.repository.SeanceRepository seanceRepo;
-
     @GetMapping
     public List<Seance> getAll(@RequestParam(required = false) String formateurEmail,
             @RequestParam(required = false) String etudiantEmail) {
         if (formateurEmail != null && !formateurEmail.isEmpty()) {
-            return seanceRepo.findByCours_Formateur_Email(formateurEmail);
+            return seanceService.findByFormateurEmail(formateurEmail);
         }
         if (etudiantEmail != null && !etudiantEmail.isEmpty()) {
-            return seanceRepo.findByEtudiantEmail(etudiantEmail);
+            return seanceService.findByEtudiantEmail(etudiantEmail);
         }
         return seanceService.findAll();
     }
 
     @PostMapping
-    public Seance create(@RequestBody Seance seance) {
-        return seanceService.save(seance);
+    public org.springframework.http.ResponseEntity<?> create(@RequestBody Seance seance) {
+        try {
+            Seance saved = seanceService.save(seance);
+            return org.springframework.http.ResponseEntity.ok(saved);
+        } catch (RuntimeException e) {
+            java.util.Map<String, String> error = new java.util.HashMap<>();
+            error.put("message", e.getMessage());
+            return org.springframework.http.ResponseEntity.status(org.springframework.http.HttpStatus.BAD_REQUEST)
+                    .body(error);
+        } catch (Exception e) {
+            java.util.Map<String, String> error = new java.util.HashMap<>();
+            error.put("message", "Erreur serveur: " + e.getMessage());
+            return org.springframework.http.ResponseEntity
+                    .status(org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        seanceService.deleteById(id);
+    public org.springframework.http.ResponseEntity<?> delete(@PathVariable Long id) {
+        try {
+            seanceService.deleteById(id);
+            return org.springframework.http.ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return org.springframework.http.ResponseEntity
+                    .status(org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

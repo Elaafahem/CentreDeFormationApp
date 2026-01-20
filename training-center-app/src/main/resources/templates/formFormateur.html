@@ -55,9 +55,12 @@
                                                 <div class="input-group">
                                                     <span class="input-group-text bg-light"><i
                                                             class="fas fa-star text-muted"></i></span>
-                                                    <input type="text" class="form-control" th:field="*{specialite}"
-                                                        required
-                                                        placeholder="Ex: Intelligence Artificielle, Cloud..." />
+                                                    <select class="form-select" th:field="*{specialite}" required>
+                                                        <option value="" disabled selected>Choisir une spécialité...
+                                                        </option>
+                                                        <option th:each="s : ${specialites}" th:value="${s.id}"
+                                                            th:text="${s.nom}"></option>
+                                                    </select>
                                                 </div>
                                             </div>
 

@@ -58,7 +58,7 @@
                                         <select class="form-select" th:field="*{formateur}">
                                             <option value="">-- Sélectionner --</option>
                                             <option th:each="f : ${formateurs}" th:value="${f.id}"
-                                                th:text="${f.nom} + ' (' + ${f.specialite} + ')'"></option>
+                                                th:text="${f.nom} + ' (' + ${f.specialite.nom} + ')'"></option>
                                         </select>
                                     </div>
 

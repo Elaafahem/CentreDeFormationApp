@@ -35,8 +35,9 @@ public class InscriptionService {
         Inscription saved = inscriptionRepository.save(inscription);
 
         // Notify student
-        emailService.notifyRegistration(saved.getEtudiant().getEmail(),
-                saved.getEtudiant().getPrenom() + " " + saved.getEtudiant().getNom());
+        emailService.notifyCourseEnrollment(saved.getEtudiant().getEmail(),
+                saved.getEtudiant().getPrenom() + " " + saved.getEtudiant().getNom(),
+                saved.getCours().getTitre());
 
         // Notify trainer
         if (saved.getCours().getFormateur() != null) {

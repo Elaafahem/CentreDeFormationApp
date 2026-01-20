@@ -28,7 +28,7 @@
     <!-- SIDEBAR FRAGMENT -->
     <nav th:fragment="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h3><i class="fas fa-graduation-cap sidebar-brand-icon"></i> ZAYENI</h3>
+            <h3><i class="fas fa-graduation-cap sidebar-brand-icon"></i> Training Center</h3>
         </div>
 
         <ul class="list-unstyled components">
@@ -60,6 +60,11 @@
             <li>
                 <a th:href="@{/groupe/index}">
                     <i class="fas fa-users"></i> Groupes
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/specialite/index}">
+                    <i class="fas fa-certificate"></i> Spécialités
                 </a>
             </li>
             <li>

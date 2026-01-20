@@ -19,6 +19,9 @@ public class FormateurController {
     @Autowired
     private FormateurService formateurService;
 
+    @Autowired
+    private com.zayeni.training.service.SpecialiteService specialiteService;
+
     @GetMapping("/index")
     public String index(Model model) {
         List<Formateur> list = formateurService.findAll();
@@ -29,6 +32,7 @@ public class FormateurController {
     @GetMapping("/form")
     public String formFormateur(Model model) {
         model.addAttribute("formateur", new Formateur());
+        model.addAttribute("specialites", specialiteService.findAll());
         return "formFormateur";
     }
 
@@ -36,6 +40,7 @@ public class FormateurController {
     public String editFormateur(Model model, @RequestParam(name = "id") Long id) {
         Formateur f = formateurService.findById(id);
         model.addAttribute("formateur", f);
+        model.addAttribute("specialites", specialiteService.findAll());
         return "formFormateur";
     }
 

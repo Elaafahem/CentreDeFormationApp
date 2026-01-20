@@ -156,6 +156,7 @@ export default function Schedule() {
       });
 
       if (response.ok) {
+        console.log("DEBUG: Response OK (200)");
         setIsDialogOpen(false);
         setFormData({
           ...formData,
@@ -165,8 +166,10 @@ export default function Schedule() {
         fetchSessions();
         toast.success("Séance planifiée avec succès");
       } else {
-        const errorData = await response.json().catch(() => ({ message: "Conflit de planning ou erreur serveur" }));
-        toast.error(errorData.message || "Conflit détecté");
+        console.log("DEBUG: Response Error (" + response.status + ")");
+        const errorData = await response.json().catch(() => ({ message: "Erreur lors de la lecture de la réponse" }));
+        console.log("DEBUG: Error data:", errorData);
+        toast.error(errorData.message || "Conflit de planning détecté");
       }
     } catch (error) {
       console.error("Error adding session:", error);

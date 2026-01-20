@@ -1,0 +1,8 @@
+target/
+!.lower-pom.xml
+.settings/
+.classpath
+.project
+.git/
+*.log
+uploads/

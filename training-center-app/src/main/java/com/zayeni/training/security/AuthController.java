@@ -22,112 +22,118 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    @Autowired
-    AuthenticationManager authenticationManager;
+        @Autowired
+        AuthenticationManager authenticationManager;
 
-    @Autowired
-    UserRepository userRepository;
+        @Autowired
+        UserRepository userRepository;
 
-    @Autowired
-    RoleRepository roleRepository;
+        @Autowired
+        RoleRepository roleRepository;
 
-    @Autowired
-    EtudiantRepository etudiantRepository;
+        @Autowired
+        EtudiantRepository etudiantRepository;
 
-    @Autowired
-    FormateurRepository formateurRepository;
+        @Autowired
+        FormateurRepository formateurRepository;
 
-    @Autowired
-    SpecialiteRepository specialiteRepository;
+        @Autowired
+        SpecialiteRepository specialiteRepository;
 
-    @Autowired
-    PasswordEncoder encoder;
+        @Autowired
+        PasswordEncoder encoder;
 
-    @Autowired
-    JwtUtils jwtUtils;
+        @Autowired
+        JwtUtils jwtUtils;
 
-    @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+        @PostMapping("/login")
+        public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+                try {
+                        Authentication authentication = authenticationManager.authenticate(
+                                        new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
+                                                        loginRequest.getPassword()));
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                        String jwt = jwtUtils.generateJwtToken(authentication);
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
+                        org.springframework.security.core.userdetails.UserDetails userDetails = (org.springframework.security.core.userdetails.UserDetails) authentication
+                                        .getPrincipal();
+                        List<String> roles = userDetails.getAuthorities().stream()
+                                        .map(item -> item.getAuthority())
+                                        .collect(Collectors.toList());
 
-        org.springframework.security.core.userdetails.UserDetails userDetails = (org.springframework.security.core.userdetails.UserDetails) authentication
-                .getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
+                        String formateurEmail = null;
+                        if (roles.contains("ROLE_FORMATEUR")) {
+                                formateurEmail = userDetails.getUsername();
+                        }
 
-        String formateurEmail = null;
-        if (roles.contains("ROLE_FORMATEUR")) {
-            formateurEmail = userDetails.getUsername();
+                        return ResponseEntity.ok(new JwtResponse(jwt,
+                                        userDetails.getUsername(),
+                                        roles,
+                                        formateurEmail));
+                } catch (org.springframework.security.authentication.BadCredentialsException e) {
+                        return ResponseEntity.status(401).body("Error: Identifiant ou mot de passe incorrect");
+                } catch (Exception e) {
+                        return ResponseEntity.status(500).body("Error: " + e.getMessage());
+                }
         }
 
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                userDetails.getUsername(),
-                roles,
-                formateurEmail));
-    }
+        @PostMapping("/register/student")
+        public ResponseEntity<?> registerStudent(@Valid @RequestBody StudentRegisterRequest signUpRequest) {
+                if (userRepository.findByUsername(signUpRequest.getEmail()) != null) {
+                        return ResponseEntity
+                                        .badRequest()
+                                        .body("Error: Email is already in use!");
+                }
 
-    @PostMapping("/register/student")
-    public ResponseEntity<?> registerStudent(@Valid @RequestBody StudentRegisterRequest signUpRequest) {
-        if (userRepository.findByUsername(signUpRequest.getEmail()) != null) {
-            return ResponseEntity
-                    .badRequest()
-                    .body("Error: Email is already in use!");
+                // Create new user's account
+                User user = new User(signUpRequest.getEmail(),
+                                encoder.encode(signUpRequest.getPassword()),
+                                true,
+                                Collections.singletonList(roleRepository.findByName("ROLE_ETUDIANT")));
+
+                userRepository.save(user);
+
+                // Create Etudiant entity
+                Etudiant etudiant = new Etudiant(signUpRequest.getMatricule(),
+                                signUpRequest.getNom(),
+                                signUpRequest.getPrenom(),
+                                signUpRequest.getEmail(),
+                                new Date());
+
+                etudiantRepository.save(etudiant);
+
+                return ResponseEntity.ok("Student registered successfully!");
         }
 
-        // Create new user's account
-        User user = new User(signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()),
-                true,
-                Collections.singletonList(roleRepository.findByName("ROLE_ETUDIANT")));
+        @PostMapping("/register/trainer")
+        @SuppressWarnings("null")
+        public ResponseEntity<?> registerTrainer(@Valid @RequestBody TrainerRegisterRequest signUpRequest) {
+                if (userRepository.findByUsername(signUpRequest.getEmail()) != null) {
+                        return ResponseEntity
+                                        .badRequest()
+                                        .body("Error: Email is already in use!");
+                }
 
-        userRepository.save(user);
+                Specialite spec = specialiteRepository.findById(signUpRequest.getSpecialiteId())
+                                .orElse(null);
 
-        // Create Etudiant entity
-        Etudiant etudiant = new Etudiant(signUpRequest.getMatricule(),
-                signUpRequest.getNom(),
-                signUpRequest.getPrenom(),
-                signUpRequest.getEmail(),
-                new Date());
+                if (spec == null) {
+                        return ResponseEntity.badRequest().body("Error: Specialite not found!");
+                }
 
-        etudiantRepository.save(etudiant);
+                // Create new user's account
+                User user = new User(signUpRequest.getEmail(),
+                                encoder.encode(signUpRequest.getPassword()),
+                                true,
+                                Collections.singletonList(roleRepository.findByName("ROLE_FORMATEUR")));
 
-        return ResponseEntity.ok("Student registered successfully!");
-    }
+                userRepository.save(user);
 
-    @PostMapping("/register/trainer")
-    @SuppressWarnings("null")
-    public ResponseEntity<?> registerTrainer(@Valid @RequestBody TrainerRegisterRequest signUpRequest) {
-        if (userRepository.findByUsername(signUpRequest.getEmail()) != null) {
-            return ResponseEntity
-                    .badRequest()
-                    .body("Error: Email is already in use!");
+                // Create Formateur entity
+                Formateur formateur = new Formateur(signUpRequest.getNom(), spec, signUpRequest.getEmail());
+                formateurRepository.save(formateur);
+
+                return ResponseEntity.ok("Trainer registered successfully!");
         }
-
-        Specialite spec = specialiteRepository.findById(signUpRequest.getSpecialiteId())
-                .orElse(null);
-
-        if (spec == null) {
-            return ResponseEntity.badRequest().body("Error: Specialite not found!");
-        }
-
-        // Create new user's account
-        User user = new User(signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()),
-                true,
-                Collections.singletonList(roleRepository.findByName("ROLE_FORMATEUR")));
-
-        userRepository.save(user);
-
-        // Create Formateur entity
-        Formateur formateur = new Formateur(signUpRequest.getNom(), spec, signUpRequest.getEmail());
-        formateurRepository.save(formateur);
-
-        return ResponseEntity.ok("Trainer registered successfully!");
-    }
 }

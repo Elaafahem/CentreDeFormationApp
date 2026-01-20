@@ -10,6 +10,7 @@ import { User, Bell, Shield, Palette, Save } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import { apiFetch } from "@/lib/api";
 
 export default function Settings() {
   const { user } = useAuth();
@@ -40,9 +41,8 @@ export default function Settings() {
 
     setIsUpdating(true);
     try {
-      const res = await fetch('http://localhost:8080/api/users/change-password', {
+      const res = await apiFetch('http://localhost:8080/api/users/change-password', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           username: user?.username,
           newPassword: passwords.new

@@ -38,11 +38,30 @@ public class EmailService {
         sendEmail(studentEmail, subject, body);
     }
 
+    public void notifyCourseEnrollment(String studentEmail, String studentName, String courseName) {
+        String subject = "Confirmation d'inscription au cours: " + courseName;
+        String body = "Bonjour " + studentName + ",\n\n" +
+                "Votre inscription au cours \"" + courseName + "\" a été confirmée avec succès.\n" +
+                "Bonne formation !";
+        sendEmail(studentEmail, subject, body);
+    }
+
     public void notifyTrainerEnrollment(String trainerEmail, String trainerName, String studentName,
             String courseName) {
         String subject = "Nouvelle inscription à votre cours";
         String body = "Bonjour " + trainerName + ",\n\nL'étudiant " + studentName + " s'est inscrit à votre cours: "
                 + courseName;
         sendEmail(trainerEmail, subject, body);
+    }
+
+    public void sendCredentials(String email, String password, String name) {
+        String subject = "Vos identifiants de connexion - Centre de Formation";
+        String body = "Bonjour " + name + ",\n\n"
+                + "Votre compte a été créé avec succès.\n"
+                + "Voici vos identifiants pour vous connecter :\n\n"
+                + "Email : " + email + "\n"
+                + "Mot de passe : " + password + "\n\n"
+                + "Veuillez changer votre mot de passe après votre première connexion.";
+        sendEmail(email, subject, body);
     }
 }
